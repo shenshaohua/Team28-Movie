@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+
+<h1><%= title %></h1>
+
+<form name="theater_overview" method="get">
+  Manager name(will be removed with user login):<br>
+  <input type="text" name="managerName"><br>
+  Movie name(Include):<br>
+  <input type="text" name="movieName"><br>
+  Movie Duration start:<br>
+  <input type="text" name="durationStart">
+  -
+  <input type="text" name="durationEnd"><br>
+  Movie Release Date:<br>
+  <input type="text" name="releaseStart">
+  -
+  <input type="text" name="releaseEnd"><br>
+  Movie Play Date:<br>
+  <input type="text" name="playDateStart">
+  -
+  <input type="text" name="playDateEnd"><br>
+  <input type="checkbox" name="includeNotPlayed"> includeNotPlayed?<br>
+  <button type="submit" class="btn btn-primary" value="Filter">Filter</button>
+</form>
+
+<%if (data.length > 0) { %>
+  <table>
+
+      <tr>
+        <th>Name</th>
+        <th>Duration</th>
+        <th>ReleaseDate</th>
+        <th>Date</th>
+      </tr>
+    <% for (var i = 0; i < data.length; i++) { %>
+    <tr>
+      <td><%= data[i].Name %></td>
+      <td><%= data[i].Duration %></td>
+      <td><%= data[i].ReleaseDate %></td>
+      <td><%= data[i].Date %></td>
+    </tr>
+    <% } %>
+  </table>
+<% } %>
+
+</body>
+</html>

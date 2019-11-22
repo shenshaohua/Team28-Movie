@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "project_package",
   "version": "1.0.0",
   "description": "",
@@ -24,4 +25,29 @@
     "url": "https://github.com/shenshaohua/Team28-Movie/issues"
   },
   "homepage": "https://github.com/shenshaohua/Team28-Movie#readme"
+=======
+  "name": "project",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "async": "^3.1.0",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "ejs": "^2.7.4",
+    "express": "~4.16.1",
+    "express-fileupload": "^1.1.6",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
+    "mysql": "^2.17.1",
+    "mysql-model": "^0.0.3",
+    "req-flash": "^0.0.3"
+  },
+  "devDependencies": {
+    "express-validator": "^6.2.0"
+  }
+>>>>>>> 4cb3eff825deccb864c8e2243ea9e8783b5cdd2c
 }
