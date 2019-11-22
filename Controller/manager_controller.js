@@ -18,16 +18,18 @@ exports.theater_detail_get = function (req, res, next) {
         var maxMoviePlayDate = req.query.playDateEnd;
         var minReleaseDate = req.query.releaseStart;
         var maxReleaseDate = req.query.releaseEnd;
-
+        var includeNotPlayed = false;
+        if (req.query.includeNotPlayed && req.query.includeNotPlayed === 'on') includeNotPlayed = true;
+        console.log(includeNotPlayed);
         // call procedure first, create the table that has information
         var testSql = "call manager_filter_th(?, ?, ?, ?, ?, ?, ?, ?, ?)";
         //db.query(testSql, ['manager1', 'Spaceballs', 0, 500, '1800-01-01', '2020-01-01', '1990-01-01', '2020-01-01', false],
         db.query(testSql, [managerName, movieName, durationStartINT, durationEndINT, minReleaseDate, maxReleaseDate, minMoviePlayDate,
-            maxMoviePlayDate, false], (error, results, fields) => {
+            maxMoviePlayDate, includeNotPlayed], (error, results, fields) => {
                 if (error) {
                     return console.error(error.message);
                 }
-                console.log("successfully create the info table 'manfilterth' ");
+                //console.log("successfully create the info table 'manfilterth' ");
         });
 
         // poll from newly created table and send it to our view
