@@ -46,6 +46,42 @@ exports.theater_detail_get = function (req, res, next) {
 
 }
 
+exports.schedule_movie_get = function (req, res, next) {
+    var sql = "Select Name from movie";
+    var movies = [];
+    db.query(sql, [], (error, results, fields) => {
+        if (error) {
+            return console.error(error.message);
+        }
+        console.log("successfully retrieved the movie list!");
+        //console.log(results);
+       // console.log(results.length);
+        movies = results;
+        console.log(movies);
+        res.render('manager_schedule_movie', {title: "Dear manager, you're welcome to schedule some movies!", movies: movies});
+    });
+}
+
+exports.schedule_movie_post = function (req, res, next) {
+    var managerName = req.body.managerName;
+    var movieName = req.body.movieName;
+    var releaseDate = req.body.releaseDate;
+    var playDate = req.body.playDate;
+
+    console.log(req.body);
+    var sql = "call manager_schedule_mov(?, ?, ?, ?)";
+    db.query(sql, [managerName, movieName, releaseDate, playDate], (error, results, fields) => {
+        if (error) {
+            return console.error(error.message);
+        }
+        console.log("successfully scheduled the movie play!");
+    });
+    res.redirect('/managerScheduleMoviePlay');
+}
+
+
+
+
 
 // Some helper functions:
 
