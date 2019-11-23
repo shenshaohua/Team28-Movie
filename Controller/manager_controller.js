@@ -96,29 +96,54 @@ exports.schedule_movie_get = function (req, res, next) {
        // console.log(results.length);
         movies = results;
         console.log(movies);
-        res.render('manager_schedule_movie', {title: "Dear manager, you're welcome to schedule some movies!", movies: movies});
+        res.render('manager_schedule_movie', {title: "Dear manager, you're welcome to schedule some movies!", movies: movies, errors: []});
     });
 }
 
-exports.schedule_movie_post = function (req, res, next) {
-    var managerName = req.body.managerName;
-    var movieName = req.body.movieName;
-    var releaseDate = req.body.releaseDate;
-    var playDate = req.body.playDate;
+exports.schedule_movie_post = [
+    // validate fields
+    body('managerName', 'managerName must not be empty.').isLength({ min: 1 }).trim(),
+    body('movieName', 'movieName must not be empty.').isLength({ min: 1 }).trim(),
+    body('releaseDate', 'releaseDate must not be empty.').isLength({ min: 1 }).trim(),
+    body('playDate', 'playDate must not be empty.').isLength({ min: 1 }).trim(),
 
-    console.log(req.body);
-    var sql = "call manager_schedule_mov(?, ?, ?, ?)";
-    db.query(sql, [managerName, movieName, releaseDate, playDate], (error, results, fields) => {
-        if (error) {
-            return console.error(error.message);
+    // Sanitize fields (using wildcard).
+    sanitizeQuery('*').escape(),
+
+    (req, res, next) => {
+
+        // Extract the validation errors from a request.
+        const errors = validationResult(req);
+
+        // if have logic errors
+        if (!errors.isEmpty()) {
+            var sql = "Select Name from movie";
+            var movies = [];
+            db.query(sql, [], (error, results, fields) => {
+                if (error) {
+                    return console.error(error.message);
+                }
+                console.log("successfully retrieved the movie list!");
+                movies = results;
+                res.render('manager_schedule_movie', {title: "Wrong info typed!", movies: movies, errors: errors.array()});
+            });
+        } else {
+            var managerName = req.body.managerName;
+            var movieName = req.body.movieName;
+            var releaseDate = req.body.releaseDate;
+            var playDate = req.body.playDate;
+
+            console.log(req.body);
+            var sql = "call manager_schedule_mov(?, ?, ?, ?)";
+            db.query(sql, [managerName, movieName, releaseDate, playDate], (error, results, fields) => {
+                if (error) {
+                    return console.error(error.message);
+                }
+                res.redirect('/managerScheduleMoviePlay');
+            })
         }
-        //console.log("successfully scheduled the movie play!");
-    });
-    res.redirect('/managerScheduleMoviePlay');
-}
-
-
-
+    }
+]
 
 
 // Some helper functions:
