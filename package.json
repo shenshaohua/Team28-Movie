@@ -35,6 +35,7 @@
   "dependencies": {
     "async": "^3.1.0",
     "body-parser": "^1.19.0",
+    "bootstrap": "^4.3.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "ejs": "^2.7.4",
@@ -47,6 +48,7 @@
     "req-flash": "^0.0.3"
   },
   "devDependencies": {
+    "dateformat": "^3.0.3",
     "express-validator": "^6.2.0"
   }
 >>>>>>> 4cb3eff825deccb864c8e2243ea9e8783b5cdd2c
