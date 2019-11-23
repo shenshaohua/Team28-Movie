@@ -45,7 +45,7 @@ var MoviePlay = MyAppModel.extend({
 })
 
 var Theater = MyAppModel.extend({
-    tableName : "movieplay"
+    tableName : "theater"
 })
 
 
