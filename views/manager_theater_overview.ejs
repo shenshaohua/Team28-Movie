@@ -18,13 +18,13 @@
   -
   <input type="text" name="durationEnd"><br>
   Movie Release Date:<br>
-  <input type="text" name="releaseStart">
+  <input type="date" name="releaseStart">
   -
-  <input type="text" name="releaseEnd"><br>
+  <input type="date" name="releaseEnd"><br>
   Movie Play Date:<br>
-  <input type="text" name="playDateStart">
+  <input type="date" name="playDateStart">
   -
-  <input type="text" name="playDateEnd"><br>
+  <input type="date" name="playDateEnd"><br>
   <input type="checkbox" name="includeNotPlayed"> includeNotPlayed?<br>
   <button type="submit" class="btn btn-primary" value="Filter">Filter</button>
 </form>
@@ -36,7 +36,7 @@
         <th>Name</th>
         <th>Duration</th>
         <th>ReleaseDate</th>
-        <th>Date</th>
+        <th>PlayDate</th>
       </tr>
     <% for (var i = 0; i < data.length; i++) { %>
     <tr>

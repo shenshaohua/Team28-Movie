@@ -12,7 +12,7 @@
   Manager name(will be removed with user login):<br>
   <input type="text" name="managerName"><br>
   Movie name:<br>
-  <select>
+  <select name="movieName">
     <% for (var i = 0; i < movies.length; i++) { %>
         <option value=<%= movies[i]['Name'] %>><%=movies[i]['Name'] %></option>
     <% } %>

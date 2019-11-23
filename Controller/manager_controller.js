@@ -3,6 +3,8 @@ let async = require('async');
 const { body,validationResult, query } = require('express-validator/check');
 const { sanitizeBody, sanitizeQuery } = require('express-validator/filter');
 
+let dateFormat = require('dateformat');
+
 
 exports.theater_detail_get = function (req, res, next) {
     res.render('manager_theater_overview', {title: 'Manager peeking theaters\' detail',
@@ -43,10 +45,11 @@ exports.theater_detail_update = [
             var movieName = req.query.movieName;
             var durationStartINT = parseInt(req.query.durationStart);
             var durationEndINT = parseInt(req.query.durationEnd);
-            var minMoviePlayDate = req.query.playDateStart;
-            var maxMoviePlayDate = req.query.playDateEnd;
-            var minReleaseDate = req.query.releaseStart;
-            var maxReleaseDate = req.query.releaseEnd;
+            var minMoviePlayDate = dateFormat(req.query.playDateStart, "yyyy-mm-dd");
+            var maxMoviePlayDate = dateFormat(req.query.playDateEnd, "yyyy-mm-dd");
+            var minReleaseDate = dateFormat(req.query.releaseStart, "yyyy-mm-dd");
+            var maxReleaseDate = dateFormat(req.query.releaseEnd, "yyyy-mm-dd");
+            //console.log(maxReleaseDate);
             var includeNotPlayed = false;
             if (req.query.includeNotPlayed && req.query.includeNotPlayed === 'on') includeNotPlayed = true;
             console.log(includeNotPlayed);
@@ -67,9 +70,15 @@ exports.theater_detail_update = [
                 if (error) {
                     return console.error(error.message);
                 }
-                //console.log(results);
+                updatedResults = [];
+                for (var i = 0; i < results.length; i++) {
+                    updatedResults[i] = results[i];
+                    updatedResults[i].ReleaseDate = dateFormat(updatedResults[i].ReleaseDate, "yyyy-mm-dd");
+                    updatedResults[i].Date = dateFormat(updatedResults[i].Date, "yyyy-mm-dd");
+                }
+                console.log(results);
                 res.render('manager_theater_overview', {title: 'Here comes your result!',
-                    data: results, errors: []});
+                    data: updatedResults, errors: []});
             });
         }
     }
@@ -103,7 +112,7 @@ exports.schedule_movie_post = function (req, res, next) {
         if (error) {
             return console.error(error.message);
         }
-        console.log("successfully scheduled the movie play!");
+        //console.log("successfully scheduled the movie play!");
     });
     res.redirect('/managerScheduleMoviePlay');
 }
