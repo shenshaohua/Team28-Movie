@@ -22,30 +22,30 @@ var Creditcard = MyAppModel.extend({
 
 var CreditcardUsage = MyAppModel.extend({
     tableName : "creditcardusage"
-})
+});
 
 var Customer = MyAppModel.extend({
     tableName : "customer"
-})
+});
 
 var Employee = MyAppModel.extend({
     tableName : "employee"
-})
+});
 
 var Manager = MyAppModel.extend({
     tableName : "manager"
-})
+});
 
 var Movie = MyAppModel.extend({
     tableName : "movie"
-})
+});
 
 var MoviePlay = MyAppModel.extend({
     tableName : "movieplay"
-})
+});
 
 var Theater = MyAppModel.extend({
-    tableName : "movieplay"
-})
+    tableName : "theater"
+});
 
 

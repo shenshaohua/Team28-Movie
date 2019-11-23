@@ -8,7 +8,7 @@
 
 <h1><%= title %></h1>
 
-<form name="theater_overview" method="get">
+<form name="theater_overview" method="get" action="/theaterDetail/getInfo">
   Manager name(will be removed with user login):<br>
   <input type="text" name="managerName"><br>
   Movie name(Include):<br>
@@ -47,6 +47,16 @@
     </tr>
     <% } %>
   </table>
+<% } %>
+
+<%if (errors.length > 0) { %>
+  <ul>
+    <% for (var i = 0; i < errors.length; i++) { %>
+      <li>
+        <%=errors[i].msg%>
+      </li>
+    <% } %>
+  </ul>
 <% } %>
 
 </body>
