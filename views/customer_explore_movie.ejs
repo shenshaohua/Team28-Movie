@@ -8,24 +8,34 @@
 
 <h1><%= title %></h1>
 
-<form name="theater_overview" method="get">
-  Manager name(will be removed with user login):<br>
-  <input type="text" name="managerName"><br>
-  Movie name(Include):<br>
-  <input type="text" name="movieName"><br>
-  Movie Duration start:<br>
-  <input type="text" name="durationStart">
-  -
-  <input type="text" name="durationEnd"><br>
-  Movie Release Date:<br>
-  <input type="text" name="releaseStart">
-  -
-  <input type="text" name="releaseEnd"><br>
+<form name="explore_movie" method="get" action="/customer_explore_movie/movieInfo">
+  Movie name:<br>
+  <select name="movieName">
+    <% for (var i = 0; i < movies.length; i++) { %>
+      <option value=<%= movies[i] %>><%=movies[i] %></option>
+    <% } %>
+  </select>
+  <br>
+  Company Name:<br>
+  <select name="companyName">
+    <% for (var i = 0; i < companies.length; i++) { %>
+      <option value=<%= companies[i] %>><%=companies[i] %></option>
+    <% } %>
+  </select>
+  <br>
+  City:<br>
+  <input type="text" name="city"><br>
+  State Name:<br>
+  <select name="state">
+    <% for (var i = 0; i < states.length; i++) { %>
+      <option value=<%= states[i] %>><%=states[i] %></option>
+    <% } %>
+  </select>
+  <br>
   Movie Play Date:<br>
-  <input type="text" name="playDateStart">
+  <input type="date" name="playStartDate">
   -
-  <input type="text" name="playDateEnd"><br>
-  <input type="checkbox" name="includeNotPlayed"> includeNotPlayed?<br>
+  <input type="date" name="playEndDate"><br>
   <button type="submit" class="btn btn-primary" value="Filter">Filter</button>
 </form>
 
@@ -33,10 +43,12 @@
   <table>
 
       <tr>
-        <th>Name</th>
-        <th>Duration</th>
-        <th>ReleaseDate</th>
-        <th>Date</th>
+        <th>Movie</th>
+        <th>Theater</th>
+        <th>Address</th>
+        <th>Company</th>
+        <th>Play Date</th>
+
       </tr>
     <% for (var i = 0; i < data.length; i++) { %>
     <tr>

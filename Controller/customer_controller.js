@@ -1,52 +1,58 @@
 let async = require('async');
 
 const { validator } = require('express-validator');
+exports.customerMovieFilterGet = function (req, res, next) {
+    // call procedure first, create the table that has information
+    var testSql = "call customer_filter_mov(?, ?, ?, ?, ?, ?)";
+    db.query(testSql, ["ALL","ALL","","ALL",null,null], (error, results, fields) => {
+        if (error) {
+            return console.error(error.message);
+        }
+    });
+    var pollSql = "Select * From CosFilterMovie";
+    db.query(pollSql,[] , (error, results, fields) => {
+        if (error) {
+            return console.error(error.message);
+        }
+        var movies = ["ALL"];
+        var states = ["ALL"];
+        var companies = ["ALL"];
+        for (var i = 0; i < results.length; i++) {
+            if (!movies.includes(results[i]['movName'])) {
+                movies.push(results[i]['movName']);
+            }
+            if (!states.includes(results[i]['thState'])) {
+                states.push(results[i]['thState']);
+            }
+            if (!companies.includes(results[i]['comName'])) {
+                companies.push(results[i]['comName']);
+            }
+        }
+        res.render('customer_explore_movie', {title: "Explore Movie", movies: movies, companies: companies,states: states,data: []});
+    });
+}
 
-exports.customerMovieFilter = function (req, res, next) {
-
-    if (isEmpty(req.query))    {
-
-        // render with (viewPage, parameters)
-        res.render('customer_explore_movie', {title: 'Explore Movie',
-                                                data: []});
-    } else {
-        var companyName = req.query.companyName;
-        var movieName = req.query.movieName;
-        var playStartDate = req.query.playStartDate;
-        var playEndDate = req.query.playEndDate;
+exports.customerMovieFilter = [
+    (req, res, next) => {
+        var testSql = "call customer_filter_mov(?, ?, ?, ?, ?, ?)";
+        var movieName = req.body.movieName;
         var city = req.query.city;
         var state = req.query.state;
-        // call procedure first, create the table that has information
-        var testSql = "call customer_filter_mov(?, ?, ?, ?, ?, ?)";
-        db.query(testSql, [movieName, companyName, city, state, playStartDate, playEndDate], (error, results, fields) => {
-                if (error) {
-                    return console.error(error.message);
-                }
-                //console.log("successfully create the info table 'manfilterth' ");
+        var companyName = req.query.companyName;
+        var start = req.query.playStartDate;
+        var end = req.query.playEndDate;
+        console.log(req.query);
+        db.query(testSql, [movieName, companyName, city,state,start,end], (error, results, fields) => {
+            if (error) {
+                return console.error(error.message);
+            }
         });
-
-        // poll from newly created table and send it to our view
         var pollSql = "Select * From CosFilterMovie";
         db.query(pollSql,[] , (error, results, fields) => {
             if (error) {
                 return console.error(error.message);
             }
-            //console.log(results);
-            res.render('manager_theater_overview', {title: 'Here comes your result!',
-                data: results});
+            res.render('customer_explore_movie', {title: "Explore Movie", movies: movies, companies: companies,states: states,data: []});
         });
     }
-
-}
-
-
-// Some helper functions:
-
-// this is a function that validates whether a javascript object is empty
-function isEmpty(obj) {
-    for(var key in obj) {
-        if(obj.hasOwnProperty(key))
-            return false;
-    }
-    return true;
-}
+]
