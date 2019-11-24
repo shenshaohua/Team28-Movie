@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+
+<h1><%= title %></h1>
+
+<form name="login" method="get">
+  Username:<br>
+  <input type="text" name="username"><br>
+  Password:<br>
+  <input type="text" name="password"><br>
+</form>
+
+<form name="login" method="POST">
+  <button type="submit" class="btn btn-primary" value="login" name="select">Login</button>
+  <button type="submit" class="btn btn-primary" value="register" name="select">Register</button>
+</form>
+
+<%if (errors.length > 0) { %>
+  <ul>
+    <% for (var i = 0; i < errors.length; i++) { %>
+      <li>
+        <%=errors[i].msg%>
+      </li>
+    <% } %>
+  </ul>
+<% } %>
+
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+
+<h1><%= title %></h1>
+
+<form name="user_register" method="get">
+  First Name:
+  <input type="text" name="fname">
+  Last Name:
+  <input type="text" name="lname"><br>
+  <br>
+  Username:
+  <input type="text" name="username"><br>
+  <br>
+  Password:
+  <input type="text" name="password">
+  Confirm Password:
+  <input type="text" name="cpassword"><br>
+  <br>
+  Credit Card#
+  <input type="text" name="cardNumber"><br>
+</form>
+
+<form name="user_register" method="POST">
+  <button type="submit" class="btn btn-primary" value="register" name="select">Register</button>
+</form>
+
+<%if (errors.length > 0) { %>
+  <ul>
+    <% for (var i = 0; i < errors.length; i++) { %>
+      <li>
+        <%=errors[i].msg%>
+      </li>
+    <% } %>
+  </ul>
+<% } %>
+
+</body>
+</html>

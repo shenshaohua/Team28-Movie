@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 var manager_controller =require('../Controller/manager_controller');
+var login_controller =require('../Controller/login_controller');
+var register_controller =require('../Controller/register_controller');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -19,6 +21,16 @@ router.get('/managerScheduleMoviePlay', manager_controller.schedule_movie_get);
 
 // Get and post for manager schedule movie
 router.post('/managerScheduleMoviePlay', manager_controller.schedule_movie_post);
+
+router.get('/login', login_controller.login_get);
+
+router.post('/login', login_controller.login_post);
+
+router.get('/nevigate', login_controller.nevigate_get);
+
+router.get('/userRegister', register_controller.user_register_get);
+
+router.post('/userRegister', register_controller.user_register_post);
 
 
 
