@@ -1,6 +1,6 @@
 let async = require('async');
-
-const { validator } = require('express-validator');
+let dateFormat = require('dateformat');
+const { body, validationResult, query,sanitizeBody, sanitizeQuery } = require('express-validator');
 exports.customerMovieFilterGet = function (req, res, next) {
     // call procedure first, create the table that has information
     var testSql = "call customer_filter_mov(?, ?, ?, ?, ?, ?)";
@@ -35,13 +35,18 @@ exports.customerMovieFilterGet = function (req, res, next) {
 exports.customerMovieFilter = [
     (req, res, next) => {
         var testSql = "call customer_filter_mov(?, ?, ?, ?, ?, ?)";
-        var movieName = req.body.movieName;
+        var movieName = req.query.movieName;
         var city = req.query.city;
         var state = req.query.state;
         var companyName = req.query.companyName;
-        var start = req.query.playStartDate;
-        var end = req.query.playEndDate;
-        console.log(req.query);
+        var start = dateFormat(req.query.playStartDate, "yyyy-mm-dd");
+        var end = dateFormat(req.query.playEndDate, "yyyy-mm-dd");
+        if (!req.query.playStartDate) {
+            start = null
+        }
+        if (!req.query.playEndDate) {
+            end = null
+        }
         db.query(testSql, [movieName, companyName, city,state,start,end], (error, results, fields) => {
             if (error) {
                 return console.error(error.message);
@@ -52,7 +57,7 @@ exports.customerMovieFilter = [
             if (error) {
                 return console.error(error.message);
             }
-            res.render('customer_explore_movie', {title: "Explore Movie", movies: movies, companies: companies,states: states,data: []});
+            res.render('customer_explore_movie', {title: "Explore Movie", data: results});
         });
     }
-]
+];

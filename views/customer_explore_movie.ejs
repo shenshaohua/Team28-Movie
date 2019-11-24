@@ -12,14 +12,14 @@
   Movie name:<br>
   <select name="movieName">
     <% for (var i = 0; i < movies.length; i++) { %>
-      <option value=<%= movies[i] %>><%=movies[i] %></option>
+      <option value="<%= movies[i]%>"><%=movies[i]%></option>
     <% } %>
   </select>
   <br>
   Company Name:<br>
   <select name="companyName">
     <% for (var i = 0; i < companies.length; i++) { %>
-      <option value=<%= companies[i] %>><%=companies[i] %></option>
+      <option value="<%= companies[i] %>"><%=companies[i] %></option>
     <% } %>
   </select>
   <br>
@@ -28,7 +28,7 @@
   State Name:<br>
   <select name="state">
     <% for (var i = 0; i < states.length; i++) { %>
-      <option value=<%= states[i] %>><%=states[i] %></option>
+      <option value="<%= states[i] %>"><%=states[i] %></option>
     <% } %>
   </select>
   <br>
@@ -36,11 +36,12 @@
   <input type="date" name="playStartDate">
   -
   <input type="date" name="playEndDate"><br>
+  <br><br>
   <button type="submit" class="btn btn-primary" value="Filter">Filter</button>
 </form>
-
+<br><br>
 <%if (data.length > 0) { %>
-  <table>
+  <table border = "1">
 
       <tr>
         <th>Movie</th>
@@ -52,10 +53,11 @@
       </tr>
     <% for (var i = 0; i < data.length; i++) { %>
     <tr>
-      <td><%= data[i].Name %></td>
-      <td><%= data[i].Duration %></td>
-      <td><%= data[i].ReleaseDate %></td>
-      <td><%= data[i].Date %></td>
+      <td><%= data[i].movName %></td>
+      <td><%= data[i].thName %></td>
+      <td><%= data[i].thStreet + ", " + data[i].thCity + ", " + data[i].thState + ", " + data[i].theZipcode%></td>
+      <td><%= data[i].comName %></td>
+      <td><%= data[i].movPlayDate %></td>
     </tr>
     <% } %>
   </table>

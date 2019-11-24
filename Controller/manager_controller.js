@@ -10,6 +10,7 @@ exports.theater_detail_get = function (req, res, next) {
         res.render('manager_theater_overview', {title: 'Manager peeking theaters\' detail',
                                                 data: []});
     } else {
+        console.log(req.query)
         var managerName = req.query.managerName;
         var movieName = req.query.movieName;
         var durationStartINT = parseInt(req.query.durationStart);
