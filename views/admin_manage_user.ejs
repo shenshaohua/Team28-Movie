@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+
+<h1><%= title %></h1>
+
+<form name="user_list" method="get" action="/adminManageUser/getInfo">
+    User name(will be removed with user login):<br>
+  <input type="text" name="userName"><br>
+  <select name="status" id="status">
+        <option value="ALL">-ALL-</option>
+        <option value="Approved">Approved</option>
+        <option value="Declined">Declined</option>
+        <option value="Pending">Pending</option>
+    </select><br>
+    <button type="submit" class="btn btn-primary" value="Filter">Filter</button>
+    <% if(typeof(Storage)!=="undefined") {%>
+  
+  localStorage.lastname="Smith";
+  document.getElementById("notes").innerHTML="Last name: " + localStorage.lastname;
+  }
+else
+  {
+  document.getElementById("notes").innerHTML="Sorry, your browser does not support web storage...";
+  } 
+</form>
+<form name="approve" method="post" action="/adminManageUser/getInfo">
+    <button type="submit" class="btn btn-primary" value="Approve" name="choose">Approve</button>
+    <button type="submit" class="btn btn-primary" value="Declined" name="choose">Decline</button>
+
+
+<%if (data.length > 0) { %>
+    <table>
+
+            <tr>
+              <th><a name="column" value="username" href="/adminManageUser/getInfo">Username</a></th> 
+              <!-- link =   -->
+              <th><a name="column" value="creditCardCount" href="/adminManageUser/getInfo">Credit Card Count</a></th>
+              <th><a name="column" value="userType" href="/adminManageUser/getInfo">User Type</a></th>
+              <th><a name="column" value="status" href="/adminManageUser/getInfo">Status</a></th>
+            </tr>
+          <% for (var i = 0; i < data.length; i++) { %>
+          <tr>
+            <td><input type="radio" name="target_username" value = <%= data[i].username %>><%= data[i].username %></td>
+            <td><%= data[i].creditCardCount %></td>
+            <td><%= data[i].userType %></td>
+            <td><%= data[i].STATUS %></td>
+          </tr>
+          <% } %>
+        </table>
+<% } %>
+</form>
+
+<button type="submit" class="btn btn-primary" value="Back">Back</button>
+
+<%if (errors.length > 0) { %>
+  <ul>
+    <% for (var i = 0; i < errors.length; i++) { %>
+      <li>
+        <%=errors[i].msg%>
+      </li>
+    <% } %>
+  </ul>
+<% } %>
+
+</body>
+</html>

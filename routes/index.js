@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var manager_controller =require('../Controller/manager_controller');
+var admin_controller = require('../Controller/admin_controller');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -11,8 +12,25 @@ router.get('/', function(req, res, next) {
 // GET request for rendering a initial view
 router.get('/theaterDetail', manager_controller.theater_detail_get);
 
+// If manager requests to list info about theaters
+router.get('/theaterDetail/getInfo', manager_controller.theater_detail_update);
 
+// Get and post for manager schedule movie
+router.get('/managerScheduleMoviePlay', manager_controller.schedule_movie_get);
 
+// Get and post for manager schedule movie
+router.post('/managerScheduleMoviePlay', manager_controller.schedule_movie_post);
+
+// Get and post for admin manage user (screen 13)
+//router.get('/adminManageUser', admin_controller.user_detail_get);
+router.get('/adminManageUser/getInfo', admin_controller.user_detail_update);
+router.post('/adminManageUser/getInfo', admin_controller.user_detail_changestatus);
+//router.get('/adminManageUser/getSortedInfo', admin_controller.user_detail_sort);
+
+// Get and post for admin manage company (screen 14)
+router.get('/adminManageCompany/getInfo', admin_controller.company_detail_update);
+router.post('/adminManageCompany/getInfo', admin_controller.company_detail_create);
+//router.get('/adminManageCompany/getInfo', admin_controller.company_detail_detail);
 
 
 module.exports = router;
