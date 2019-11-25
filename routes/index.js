@@ -12,8 +12,9 @@ router.get('/', function(req, res, next) {
 // GET request for rendering a initial view
 router.get('/theaterDetail', manager_controller.theater_detail_get);
 
-router.get('/customer_explore_movie',customer_controller.customerMovieFilterGet)
-router.get('/customer_explore_movie/movieInfo',customer_controller.customerMovieFilter)
+router.get('/customer_explore_movie',customer_controller.customerMovieFilterGet);
+router.get('/customer_explore_movie/movieInfo',customer_controller.customerMovieFilter);
+router.get('/view_history',customer_controller.customerViewHistory);
 
 
 module.exports = router;

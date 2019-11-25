@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+
+<h1><%= title %></h1>
+<br><br>
+<%if (data.length > 0) { %>
+  <table border = "1">
+
+      <tr>
+        <th>Movie</th>
+        <th>Theater</th>
+        <th>Company</th>
+        <th>Card#</th>
+        <th>View Date</th>
+
+      </tr>
+    <% for (var i = 0; i < data.length; i++) { %>
+    <tr>
+      <td><%= data[i].movName %></td>
+      <td><%= data[i].thName %></td>
+      <td><%= data[i].comName%></td>
+      <td><%= data[i].creditCardNum %></td>
+      <td><%= data[i].movPlayDate %></td>
+    </tr>
+    <% } %>
+  </table>
+<% } %>
+
+</body>
+</html>

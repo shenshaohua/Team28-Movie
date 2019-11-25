@@ -14,6 +14,7 @@ exports.customerMovieFilterGet = function (req, res, next) {
         if (error) {
             return console.error(error.message);
         }
+        data = saveData(results);
         var movies = ["ALL"];
         var states = ["ALL"];
         var companies = ["ALL"];
@@ -61,3 +62,14 @@ exports.customerMovieFilter = [
         });
     }
 ];
+
+exports.customerViewHistory = function (req, res, next) {
+    var username = req.session.username;
+    var testSql = "call customer_view_history(?)";
+    db.query(testSql, [username], (error, results, fields) => {
+        if (error) {
+            return console.error(error.message);
+        }
+        res.render('view_history', {title: "View History", data: []});
+    });
+}
