@@ -32,7 +32,9 @@ router.get('/userRegister', register_controller.user_register_get);
 
 router.post('/userRegister', register_controller.user_register_post);
 
+router.get('/customerRegister', register_controller.customer_register_get);
 
+router.post('/customerRegister', register_controller.customer_register_post);
 
 
 module.exports = router;

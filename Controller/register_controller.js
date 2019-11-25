@@ -5,7 +5,7 @@ const { sanitizeBody, sanitizeQuery } = require('express-validator/filter');
 exports.user_register_get = function(req, res, next) {
     //var sql = "get login info"
     res.render('user_register', {title: "User Register", errors: []});
-}
+};
 
 exports.user_register_post = [
     // validate fields
@@ -24,16 +24,16 @@ exports.user_register_post = [
         const errors = validationResult(req);
 
         // if have logic errors
-       // if (!errors.isEmpty()) {
+        if (!errors.isEmpty()) {
             
-                //res.render('user_register', {title: "Wrong info typed!", errors: errors.array()});
+            res.render('user_register', {title: "Wrong info typed!", errors: errors.array()});
             
-       // } else {
+        } else {
             var fName = req.body.fName;
             var lName = req.body.lName;
             var username = req.body.username;
             var password = req.body.password;
-            var cpassword = req.body;
+            var cpassword = req.body.cpassword;
             
             var users = [];
             var query = "select distinct username from user"
@@ -43,13 +43,20 @@ exports.user_register_post = [
                 }
                 console.log("successfully get the user names!");
                 users = results;
+                for (var i = 0; i < users.length; i++) {
+                    if (users[i]['username'] == username) {
+                        res.render('user_register', {title: "User name has been used!", errors: []});
+                        break;
+                    }
+                }
             });
-            if (users.includes(username)) {
-                res.render('user_register', {title: "User name has been used!", errors: []});
-            }else if (password.length < 8) {
+            //console.log(users);
+            if (password.length < 8) {
                 //console.log(password.length)
                 res.render('user_register', {title: "Password must be at least 8 characters!", errors: []});
-            } else if (password != cpassword) {
+            } else if (password!==cpassword) {
+                //console.log(password);
+                //console.log(cpassword);
                 res.render('user_register', {title: "Confirm password and password must be same!", errors: []});
             } else {
                 console.log(req.body);
@@ -62,9 +69,18 @@ exports.user_register_post = [
                 });
             }
             
-        //}
+        }
     }
-]
+];
+
+exports.customer_register_get = function(req, res, next) {
+    //var sql = "get login info"
+    res.render('customer_register', {title: "Customer Register", errors: []});
+};
+
+exports.customer_register_post = [
+
+];
 
 function isEmptyObj(obj) {
     for(var key in obj) {

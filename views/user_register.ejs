@@ -8,24 +8,25 @@
 
 <h1><%= title %></h1>
 
-<form name="user_register" method="get">
+<form name="user_register" method="POST">
   First Name:
-  <input type="text" name="fname">
+  <input type="text" name="fName">
   Last Name:
-  <input type="text" name="lname"><br>
+  <input type="text" name="lName"><br>
   <br>
   Username:
   <input type="text" name="username"><br>
   <br>
   Password:
-  <input type="text" name="password">
+  <input type="password" name="password">
   Confirm Password:
-  <input type="text" name="cpassword"><br>
+  <input type="password" name="cpassword"><br>
   <br>
+  <button type="submit" class="btn btn-primary" value="register" name="select">Register</button>
 </form>
 
-<form name="user_register" method="POST">
-  <button type="submit" class="btn btn-primary" value="register" name="select">Register</button>
+<form action="/nevigate" method="get">
+  <button type="submit" class="btn btn-primary btn-lg">Back</button>
 </form>
 
 <%if (errors.length > 0) { %>
