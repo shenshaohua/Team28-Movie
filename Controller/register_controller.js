@@ -33,7 +33,7 @@ exports.user_register_post = [
             var lName = req.body.lName;
             var username = req.body.username;
             var password = req.body.password;
-            var cpassword = req.body
+            var cpassword = req.body;
             
             var users = [];
             var query = "select distinct username from user"
@@ -59,11 +59,11 @@ exports.user_register_post = [
                         return console.error(error.message);
                     }
                     res.redirect('/login');
-                })
+                });
             }
             
-        }
-    //}
+        //}
+    }
 ]
 
 function isEmptyObj(obj) {
