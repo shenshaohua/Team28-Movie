@@ -12,14 +12,8 @@
   <br>
   Company Name:
   <select name="company">
-    <% if (companyName != "ALL") { %>
-      <option value="<%= companyName%>"><%=companyName%></option>
-    <% } %>
-    <option value="ALL">-ALL-</option>
     <% for (var i = 0; i < companies.length; i++) { %>
-      <% if (companies[i] != companyName) { %>
-        <option value="<%= companies[i]%>"><%=companies[i]%></option>
-      <% } %>
+      <option value="<%= companies[i]%>"><%=companies[i]%></option>
     <% } %>
   </select>
   Visit Date:
@@ -45,12 +39,12 @@
 
     </tr>
     <% for (var i = 0; i < data.length; i++) { %>
-      <%if (data[i].CompanyName == companyName || companyName == "ALL") { %>
+      <%if (data[i].comName == companyName || companyName == "ALL") { %>
         <tr>
-          <td><%= data[i].TheaterName %></td>
-          <td><%= data[i].Street + ", " + data[i].City + ", " + data[i].State + ", " + data[i].Zipcode%></td>
-          <td><%= data[i].CompanyName %></td>
-          <td><%= data[i].Date %></td>
+          <td><%= data[i].thName %></td>
+          <td><%= data[i].thStreet + ", " + data[i].thCity + ", " + data[i].thState + ", " + data[i].thZipcode%></td>
+          <td><%= data[i].comName %></td>
+          <td><%= data[i].visitDate %></td>
         </tr>
       <% } %>
     <% } %>

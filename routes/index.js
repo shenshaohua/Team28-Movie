@@ -12,10 +12,10 @@ router.get('/', function(req, res, next) {
 
 // GET request for rendering a initial view
 router.get('/theaterDetail', manager_controller.theater_detail_get);
-
+//20
 router.get('/customer_explore_movie',customer_controller.customerMovieFilterGet);
 router.get('/customer_explore_movie/view_movie',customer_controller.customerViewMovie);
-
+//21
 router.get('/view_history',customer_controller.customerViewHistory);
 
 router.get('/login', login_controller.login_get);
@@ -25,7 +25,11 @@ router.post('/login', login_controller.login_post);
 
 // logout page
 router.get('/logout', login_controller.logout_page);
+//22
+router.get('/user_explore_theater',user_controller.userExploreTheaterGet);
+router.get('/user_explore_theater/visit_theater',user_controller.userVisitTheater);
 
+//23
 router.get('/user_visit_history',user_controller.userVisitHistoryGet);
 router.get('/user_visit_history/visitInfo',user_controller.userVisitHistoryFilter);
 

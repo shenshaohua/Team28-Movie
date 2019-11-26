@@ -7,9 +7,16 @@
 </head>
 
 <body>
-<h4>You have successfully viewed <%= movName%>!</h4>
-<h5>Redirecting in 3 seconds...</h5>
-
+<%if (error == 1) {%>
+  <h4>You did not select one movie, please select one!</h4>
+  <h5>Redirecting in 3 seconds...</h5>
+<%} else if (error == 2) {%>
+  <h4>You have viewed 3 movies today!</h4>
+  <h5>Redirecting in 3 seconds...</h5>
+<%} else {%>
+  <h4>You have successfully viewed <%= movName%>! You can view <%=left%> more movies today.</h4>
+  <h5>Redirecting in 3 seconds...</h5>
+<%}%>
 </body>
 
 </html>
