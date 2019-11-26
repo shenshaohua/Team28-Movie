@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+
+<h1><%= title %></h1>
+
+<form name="create_movie" method="post">
+    Name<br>
+    <input type="text" name="movieName"><br>
+    Duration<br>
+    <input type="text" name="duration"><br>
+    Release Date<br>
+    <input type="date" name="releaseDate"><br>
+  
+  <button type="submit" class="btn btn-primary" value="Add">Add</button>
+</form>
+
+<%if (errors.length > 0) { %>
+  <ul>
+    <% for (var i = 0; i < errors.length; i++) { %>
+      <li>
+        <%=errors[i].msg%>
+      </li>
+    <% } %>
+  </ul>
+<% } %>
+
+</body>
+</html>
