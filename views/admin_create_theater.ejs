@@ -14,7 +14,7 @@
     Company<br>
     <select name="companyName">
     <% for (var i = 0; i < companys.length; i++) { %>
-        <option value="<%= companys[i]['Name'] %>"><%=companys[i]['Name'] %></option>
+        <option value=<%= companys[i]['Name'] %>><%=companys[i]['Name'] %></option>
     <% } %>
     </select><br>
     Street Address<br>

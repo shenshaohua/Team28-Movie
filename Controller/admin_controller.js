@@ -73,7 +73,7 @@ exports.user_detail_update = [
                 }
             });
 
-            var pollSql = "Select * From AdminFilterUser";
+            var pollSql = "Select * From AdFilterUser";
             db.query(pollSql,[] , (error, results, fields) => {
                 if (error) {
                     return console.error(error.message);
