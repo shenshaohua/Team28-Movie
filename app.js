@@ -6,7 +6,9 @@ var logger = require('morgan');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var fileUpload = require('express-fileupload');
+var session = require('express-session');
 
+var application_secret = "team28HashString";
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -36,7 +38,11 @@ global.db = db;
 
 // view engine setup & configure middleware
 //app.set('port', process.env.port || port); // set express to use this port
-
+app.use(session({
+  secret: application_secret,
+  resave: false,
+  saveUninitialized: false
+}));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 

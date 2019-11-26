@@ -2,10 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6960aecd-d19b-4af1-be76-9ba237c2f1e1" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/views/view_history.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Controller/login_controller.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Controller/user_controller.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/common_template.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/login.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/logout_view.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/user_visit_history.ejs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/views/view_movie.ejs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/customer_controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/customer_controller.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/manager_controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/manager_controller.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/www" beforeDir="false" afterPath="$PROJECT_DIR$/bin/www" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/customer_explore_movie.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/customer_explore_movie.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/index.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/view_history.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/view_history.ejs" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -26,6 +41,13 @@
     </option>
     <expand />
     <select />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="ROOT_SYNC" value="DONT_SYNC" />
@@ -52,6 +74,7 @@
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\GT\Fall 2019\Movie project\views" />
+      <recent name="D:\GT\Fall 2019\Movie project" />
       <recent name="D:\GT\Fall 2019\Movie project\Controller" />
     </key>
   </component>
@@ -113,6 +136,8 @@
       <workItem from="1574536036828" duration="2183000" />
       <workItem from="1574608775139" duration="15955000" />
       <workItem from="1574706742549" duration="699000" />
+      <workItem from="1574710101042" duration="22781000" />
+      <workItem from="1574787596115" duration="7525000" />
     </task>
     <servers />
   </component>
