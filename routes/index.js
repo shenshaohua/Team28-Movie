@@ -30,7 +30,7 @@ router.post('/adminManageUser/getInfo', admin_controller.user_detail_changestatu
 
 // Get and post for admin create theater (screen 15)
 router.get('/adminCreateTheater', admin_controller.create_theater_get);
-//router.post('/adminCreateTheater', admin_controller.create_theater_post);
+router.post('/adminCreateTheater', admin_controller.create_theater_post);
 
 // Get and post for admin create movie (screen 17)
 router.get('/adminCreateMovie', admin_controller.create_movie_get);

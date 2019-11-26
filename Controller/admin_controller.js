@@ -6,7 +6,6 @@ const { sanitizeBody, sanitizeQuery } = require('express-validator/filter');
 //const e = document.getElementById('1');
 
 const dbQuery = function( sql, values ) {
-    // 返回一个 Promise
     return new Promise(( resolve, reject ) => {
         db.query(sql, values, ( err, rows) => {
   
@@ -143,6 +142,7 @@ exports.create_theater_get = async function (req, res, next) {
 exports.create_theater_post = [
     // validate fields
     body('theaterName', 'theaterName must not be empty.').isLength({ min: 1 }).trim(),
+    body('companyName', 'companyName must not be empty.').isLength({ min: 1 }).trim(),
     body('address', 'address must not be empty.').isLength({ min: 1 }).trim(),
     body('city', 'city must not be empty.').isLength({ min: 1 }).trim(),
     body('zipcode', 'zipcode must not be empty.').isLength({ min: 1 }).trim(),
@@ -159,7 +159,7 @@ exports.create_theater_post = [
             res.render('admin_create_theater', {title: 'Create Theater',
                 errors: errors.array()});
         } else {
-            var theaterName = req.body.theater;
+            var theaterName = req.body.theaterName;
             var companyName = req.body.companyName;
             var address = req.body.address;
             var city = req.body.city;
@@ -167,8 +167,16 @@ exports.create_theater_post = [
             var zipcode = req.body.zipcode;
             var capacity = req.body.capacity;
             var managerName = req.body.managerName;
+
+            console.log(req.body);
             
-            var sql = "call admin_create_theater()"
+            var sql = "call admin_create_theater(?,?,?,?,?,?,?,?)";
+            db.query(sql, [theaterName, companyName, address, city, state, zipcode, capacity, managerName], (error, results, fields) => {
+                if (error) {
+                    return console.error(error.message);
+                }
+                res.redirect('/adminCreateTheater');
+            })
 
         }
     }
