@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>View Successfully</title>
+  <!-- redirecting in "3" seconds -->
+  <meta http-equiv="refresh" content="3;url=/user_explore_theater" />
+</head>
+
+<body>
+<% if (error == 0) { %>
+<h4>You have successfully visited <%= theaterName%>!</h4>
+<h5>Redirecting in 3 seconds...</h5>
+<% } else if (error == 1) { %>
+<h4>You did not enter visit date, please enter visit date!</h4>
+<h5>Redirecting in 3 seconds...</h5>
+<% } else { %>
+  <h4>You did not choose one theater, please choose one!</h4>
+  <h5>Redirecting in 3 seconds...</h5>
+<% } %>
+</body>
+
+</html>

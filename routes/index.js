@@ -3,23 +3,23 @@ var router = express.Router();
 
 var manager_controller =require('../Controller/manager_controller');
 var admin_controller = require('../Controller/admin_controller');
+var login_controller = require('../Controller/login_controller');
+const customer_controller = require("../Controller/customer_controller");
+const user_controller = require("../Controller/user_controller");
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Hello' });
+    res.render('index', { title: 'Hello', errors: [], sess: req.session});
+            //sess: {username: "yo", status: "approved", identites: "??"}
 });
 
-// GET request for rendering a initial view
-router.get('/theaterDetail', manager_controller.theater_detail_get);
 
-// If manager requests to list info about theaters
-router.get('/theaterDetail/getInfo', manager_controller.theater_detail_update);
+router.get('/login', login_controller.login_get);
+// User entered login information
+router.post('/login', login_controller.login_post);
 
-// Get and post for manager schedule movie
-router.get('/managerScheduleMoviePlay', manager_controller.schedule_movie_get);
-
-// Get and post for manager schedule movie
-router.post('/managerScheduleMoviePlay', manager_controller.schedule_movie_post);
+// logout page
+router.get('/logout', login_controller.logout_page);
 
 
 // Get and post for admin manage user (screen 13)
@@ -35,6 +35,36 @@ router.post('/adminCreateTheater', admin_controller.create_theater_post);
 // Get and post for admin create movie (screen 17)
 router.get('/adminCreateMovie', admin_controller.create_movie_get);
 router.post('/adminCreateMovie', admin_controller.create_movie_post);
+
+
+// GET request for rendering a initial view
+router.get('/theaterDetail', manager_controller.theater_detail_get);
+
+// If manager requests to list info about theaters
+router.get('/theaterDetail/getInfo', manager_controller.theater_detail_update);
+
+// Get and post for manager schedule movie
+router.get('/managerScheduleMoviePlay', manager_controller.schedule_movie_get);
+
+// Get and post for manager schedule movie
+router.post('/managerScheduleMoviePlay', manager_controller.schedule_movie_post);
+
+// GET request for rendering a initial view
+router.get('/theaterDetail', manager_controller.theater_detail_get);
+//20
+router.get('/customer_explore_movie',customer_controller.customerMovieFilterGet);
+router.get('/customer_explore_movie/view_movie',customer_controller.customerViewMovie);
+//21
+router.get('/view_history',customer_controller.customerViewHistory);
+
+
+//22
+router.get('/user_explore_theater',user_controller.userExploreTheaterGet);
+router.get('/user_explore_theater/visit_theater',user_controller.userVisitTheater);
+
+//23
+router.get('/user_visit_history',user_controller.userVisitHistoryGet);
+router.get('/user_visit_history/visitInfo',user_controller.userVisitHistoryFilter);
 
 
 module.exports = router;

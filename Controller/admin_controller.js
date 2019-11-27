@@ -9,7 +9,6 @@ const { sanitizeBody, sanitizeQuery } = require('express-validator/filter');
 const dbQuery = function( sql, values ) {
     return new Promise(( resolve, reject ) => {
         db.query(sql, values, ( err, rows) => {
-  
            if ( err ) {
               reject( err )
             } else {
@@ -179,16 +178,16 @@ exports.user_detail_changestatus = [
 
 //screen 15
 exports.create_theater_get = async function (req, res, next) {
-    // if (req.session.isAdmin === null || req.session.isAdmin != 1) {
-    //     res.render('index', { title: 'Hello',
-    //         errors: [{msg: "You are not an administrator, you have no right to view the page!"}], sess: req.session});
-    // } else {
+    if (req.session.isAdmin === null || req.session.isAdmin != 1) {
+        res.render('index', { title: 'Hello',
+            errors: [{msg: "You are not an administrator, you have no right to view the page!"}], sess: req.session});
+    } else {
         var sql1 = "Select Name from company";
-        var sql2 = "Select UserName from manager";
+        var sql2 = "Select UserName from manager where UserName not in (select managerUsername from theater)";
         const companys = await dbQuery(sql1);
         const managerNames = await dbQuery(sql2);
         res.render('admin_create_theater', {title: "Create Theater", companys: companys, managerNames: managerNames, errors: []});
-    // }
+    }
     
 }
 exports.create_theater_post = [
@@ -219,20 +218,9 @@ exports.create_theater_post = [
             var zipcode = req.body.zipcode;
             var capacity = req.body.capacity;
             var managerName = req.body.managerName;
-            var thnameConstrain = true;
+            //var thnameConstrain = true;
 
-            //logic constrain: theater name must be unique within a company
-            var sql1 = "select TheaterName from theater where CompanyName = '" + companyName + "'";
-            const names = dbQuery(sql1);
-            for(var i = 0; i < names.length; i++) {
-                if(names[i]['theaterName'] === theaterName) {
-                    thnameConstrain = false;
-                }
-            }
-
-            if(!theaterName) {
-                return console.error("theater name is invaild");
-            }
+            
             var sql = "call admin_create_theater(?,?,?,?,?,?,?,?)";
             db.query(sql, [theaterName, companyName, address, city, state, zipcode, capacity, managerName], (error, results, fields) => {
                 if (error) {

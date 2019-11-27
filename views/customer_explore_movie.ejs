@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+
+<h1><%= title %></h1>
+
+<form name="explore_movie" method="get" action="/customer_explore_movie">
+  <br>
+  Movie Name:
+  <select name="movieName">
+    <% for (var i = 0; i < movies.length; i++) { %>
+      <option value="<%= movies[i]%>"><%=movies[i]%></option>
+    <% } %>
+  </select>
+  Company Name:
+  <select name="companyName">
+    <% for (var i = 0; i < companies.length; i++) { %>
+      <option value="<%= companies[i] %>"><%=companies[i] %></option>
+    <% } %>
+  </select>
+  <br>
+  <br>City:
+  <input type="text" name="city">
+  State:
+  <select name="state">
+    <% for (var i = 0; i < states.length; i++) { %>
+      <option value="<%= states[i] %>"><%=states[i] %></option>
+    <% } %>
+  </select>
+  <br>
+  <br>Movie Play Date:
+  <input type="date" name="playStartDate">
+  -
+  <input type="date" name="playEndDate"><br>
+  <br><br>
+  <button type="submit" class="btn btn-primary" value="Filter">Filter</button>
+  <br><br>
+</form>
+<form action="/customer_explore_movie/view_movie" method="get">
+  <%if (data.length > 0) { %>
+    <table border = "1">
+      <col width="240">
+      <col width="240">
+      <col width="400">
+      <col width="240">
+      <col width="400">
+      <tr>
+        <th>Movie</th>
+        <th>Theater</th>
+        <th>Address</th>
+        <th>Company</th>
+        <th>Play Date</th>
+      </tr>
+      <% for (var i = 0; i < data.length; i++) { %>
+        <tr>
+          <td><input type="radio" name = "view_movie" value = <%= i%>><%= data[i].movName %></td>
+          <td><%= data[i].thName %></td>
+          <td><%= data[i].thStreet + ", " + data[i].thCity + ", " + data[i].thState + ", " + data[i].thZipcode%></td>
+          <td><%= data[i].comName %></td>
+          <td><%= data[i].movPlayDate %></td>
+        </tr>
+      <% } %>
+    </table>
+  <% } else {%>
+    <table border = "1">
+      <col width="240">
+      <col width="240">
+      <col width="400">
+      <col width="240">
+      <col width="400">
+      <tr>
+        <th>Movie</th>
+        <th>Theater</th>
+        <th>Address</th>
+        <th>Company</th>
+        <th>Play Date</th>
+      </tr>
+      <% for (var i = 0; i < 5; i++) { %>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+      <% } %>
+    </table>
+  <% } %>
+  <br><br>
+  Card Number:
+  <select name="cardNumber">
+    <% for (var i = 0; i < cards.length; i++) { %>
+      <option value="<%= cards[i]['CreditCardNum'] %>"><%=cards[i]['CreditCardNum'] %></option>
+    <% } %>
+  </select>
+  <button type="submit" class="btn btn-primary" value="View">View</button>
+</form>
+<br><br>
+<form action="/" method="get">
+  <button type="submit" class="btn btn-primary" value="Back">Back</button>
+</form>
+
+</body>
+</html>

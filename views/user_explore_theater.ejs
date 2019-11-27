@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+
+<h1><%= title %></h1>
+
+<form name="explore_theater" method="get" action="/user_explore_theater">
+  <br>
+  Theater Name:
+  <select name="theaters">
+    <% for (var i = 0; i < theaters.length; i++) { %>
+      <option value="<%= theaters[i]%>"><%=theaters[i]%></option>
+    <% } %>
+  </select>
+  Company Name:
+  <select name="companies">
+    <% for (var i = 0; i < companies.length; i++) { %>
+      <option value="<%= companies[i] %>"><%=companies[i] %></option>
+    <% } %>
+  </select>
+  <br>
+  <br>City:
+  <input type="text" name="city">
+  State:
+  <select name="states">
+    <% for (var i = 0; i < states.length; i++) { %>
+      <option value="<%= states[i] %>"><%=states[i] %></option>
+    <% } %>
+  </select>
+  <br>
+  <br>
+  <button type="submit" class="btn btn-primary" value="Filter">Filter</button>
+  <br><br>
+</form>
+<form action="/user_explore_theater/visit_theater" method="get">
+  <%if (data.length > 0) { %>
+    <table border = "1">
+      <col width="240">
+      <col width="400">
+      <col width="240">
+      <tr>
+        <th>Theater</th>
+        <th>Address</th>
+        <th>Company</th>
+      </tr>
+      <% for (var i = 0; i < data.length; i++) { %>
+        <tr>
+          <td><input type="radio" name = "visit_theater" value = <%= i%>><%= data[i].thName %></td>
+          <td><%= data[i].thStreet + ", " + data[i].thCity + ", " + data[i].thState + ", " + data[i].thZipcode%></td>
+          <td><%= data[i].comName %></td>
+        </tr>
+      <% } %>
+    </table>
+  <% } else {%>
+    <table border = "1">
+      <col width="240">
+      <col width="400">
+      <col width="240">
+      <tr>
+        <th>Theater</th>
+        <th>Address</th>
+        <th>Company</th>
+      </tr>
+      <% for (var i = 0; i < 5; i++) { %>
+        <tr>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+          <td>&nbsp;</td>
+        </tr>
+      <% } %>
+    </table>
+  <% } %>
+  <br><br>
+  Visit Date:
+    <input type="date" min = <%=today%> name="visitDate">
+  <button type="submit" class="btn btn-primary" value="Visit">Log Visit</button>
+</form>
+<br><br>
+<form action="/" method="get">
+  <button type="submit" class="btn btn-primary" value="Back">Back</button>
+</form>
+
+</body>
+</html>

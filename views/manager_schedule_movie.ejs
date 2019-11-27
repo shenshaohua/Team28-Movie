@@ -8,13 +8,15 @@
 
 <h1><%= title %></h1>
 
+<%- include('common_template') -%>
+
 <form name="theater_overview" method="post">
-  Manager name(will be removed with user login):<br>
-  <input type="text" name="managerName"><br>
+  <!-- Manager name(will be removed with user login):<br>
+  <input type="text" name="managerName"><br> -->
   Movie name:<br>
   <select name="movieName">
     <% for (var i = 0; i < movies.length; i++) { %>
-        <option value=<%= movies[i]['Name'] %>><%=movies[i]['Name'] %></option>
+        <option value="<%= movies[i]['Name'] %>"><%=movies[i]['Name'] %></option>
     <% } %>
   </select>
   <br>

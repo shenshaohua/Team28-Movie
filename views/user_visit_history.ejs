@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+
+<h1><%= title %></h1>
+
+<form name="visit_history" method="get" action="/user_visit_history/visitInfo">
+  <br>
+  Company Name:
+  <select name="company">
+    <% for (var i = 0; i < companies.length; i++) { %>
+      <option value="<%= companies[i]%>"><%=companies[i]%></option>
+    <% } %>
+  </select>
+  Visit Date:
+  <input type="date" name="visitStartDate">
+  -
+  <input type="date" name="visitEndDate">
+  <br>
+  <br><br>
+  <button type="submit" class="btn btn-primary" value="Filter2">Filter</button>
+</form>
+<br><br>
+<%if (data.length > 0) { %>
+  <table border = "1">
+    <col width="240">
+    <col width="450">
+    <col width="240">
+    <col width="350">
+    <tr>
+      <th>Theater</th>
+      <th>Address</th>
+      <th>Company</th>
+      <th>Visit Date</th>
+    </tr>
+    <% for (var i = 0; i < data.length; i++) { %>
+      <%if (data[i].comName == companyName || companyName == "ALL") { %>
+        <tr>
+          <td><%= data[i].thName %></td>
+          <td><%= data[i].thStreet + ", " + data[i].thCity + ", " + data[i].thState + ", " + data[i].thZipcode%></td>
+          <td><%= data[i].comName %></td>
+          <td><%= data[i].visitDate %></td>
+        </tr>
+      <% } %>
+    <% } %>
+  </table>
+<% } else {%>
+  <table border = "1">
+    <col width="240">
+    <col width="450">
+    <col width="240">
+    <col width="350">
+    <tr>
+      <th>Theater</th>
+      <th>Address</th>
+      <th>Company</th>
+      <th>Visit Date</th>
+    </tr>
+    <% for (var i = 0; i < 3; i++) { %>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    <% } %>
+  </table>
+<% } %>
+<br><br>
+<form action="/" method="get">
+  <button type="submit" class="btn btn-primary" value="Back">Back</button>
+</form>
+</body>
+</html>
+© 2019 GitHub, Inc.

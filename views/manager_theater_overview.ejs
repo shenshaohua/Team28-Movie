@@ -8,9 +8,13 @@
 
 <h1><%= title %></h1>
 
+<%- include('common_template') -%>
+
 <form name="theater_overview" method="get" action="/theaterDetail/getInfo">
+  <!--
   Manager name(will be removed with user login):<br>
   <input type="text" name="managerName"><br>
+  -->
   Movie name(Include):<br>
   <input type="text" name="movieName"><br>
   Movie Duration start:<br>
@@ -25,13 +29,12 @@
   <input type="date" name="playDateStart">
   -
   <input type="date" name="playDateEnd"><br>
-  <input type="checkbox" name="includeNotPlayed"> includeNotPlayed?<br>
+  <input type="checkbox" name="includeNotPlayed">Only Include Not Played Movies<br>
   <button type="submit" class="btn btn-primary" value="Filter">Filter</button>
 </form>
 
 <%if (data.length > 0) { %>
   <table>
-
       <tr>
         <th>Name</th>
         <th>Duration</th>
