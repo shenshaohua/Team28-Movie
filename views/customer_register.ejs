@@ -21,11 +21,28 @@
   <input type="text" name="password">
   Confirm Password:
   <input type="text" name="cpassword"><br>
+  
   <br>
   Credit Card#
-  <input type="text" name="cardNumber">
   <br>
+  <% data.forEach(function(d) { %>
+      <%= d %> <br/>
+  <% }); %>
+  <!--<p> <%= data %> </p>-->
+  <br>
+  <textarea name="cardNumber" cols="25" rows="1"></textarea>
+  <button type="submit" class="btn btn-primary" value="add" name="select">Add</button>
+
   <button type="submit" class="btn btn-primary" value="register" name="select">Register</button>
+  <br>
+
+  
+</form>
+
+<form action="/customerRegister/addCreditCard" name="creditcard" method="POST" >
+    
+
+
 </form>
 
 <form action="/nevigate" method="get">

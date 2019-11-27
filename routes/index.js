@@ -36,5 +36,7 @@ router.get('/customerRegister', register_controller.customer_register_get);
 
 router.post('/customerRegister', register_controller.customer_register_post);
 
+router.post('/customerRegister/addCreditCard', register_controller.customer_add_post);
+
 
 module.exports = router;

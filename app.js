@@ -6,6 +6,8 @@ var logger = require('morgan');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var fileUpload = require('express-fileupload');
+var session = require('express-session');
+
 
 
 var indexRouter = require('./routes/index');
@@ -46,6 +48,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+var application_secret = "team28HashString";
+
+app.use(session({
+  secret: application_secret,
+  resave: false,
+  saveUninitialized: false
+}));
 
 app.use(bodyParser.json()); // parse form data client
 app.use(fileUpload()); // configure fileupload
