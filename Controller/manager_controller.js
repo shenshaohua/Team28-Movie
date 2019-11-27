@@ -125,7 +125,7 @@ exports.schedule_movie_post = [
                 }
                 console.log("successfully retrieved the movie list!");
                 movies = results;
-                res.render('manager_schedule_movie', {title: "Wrong info typed!", movies: movies, errors: errors.array()});
+                res.render('manager_schedule_movie', {title: "Wrong info typed!", movies: [], errors: errors.array()});
             });
         } else {
             var managerName = req.body.managerName;

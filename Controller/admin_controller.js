@@ -25,9 +25,6 @@ var direct = 1;
 
 //screen 13
 exports.user_detail_update = [
-    // Validate fields.
-    //query('userName', 'userName must not be empty.').isLength({ min: 1 }).trim(),
-    
     // Sanitize fields (using wildcard).
     sanitizeQuery('*').escape(),
 
@@ -41,9 +38,14 @@ exports.user_detail_update = [
         }
         else if (isEmptyObj(req.query))    {
 
-            // render with (viewPage, parameters)
-            res.render('admin_manage_user', {title: 'Manage User',
+            if (req.session.isAdmin === null || req.session.isAdmin != 1) {
+                res.render('index', { title: 'Hello',
+                    errors: [{msg: "You are not an administrator, you have no right to view the page!"}], sess: req.session});
+            } else {
+                res.render('admin_manage_user', {title: 'Manage User',
                 data: [], errors: []});
+            }
+            
         } else {
             updatedResults = [];
             var userName = req.query.userName;
@@ -126,30 +128,40 @@ exports.user_detail_sort = function(req, res, next) {
             });
 
 }
-
 exports.user_detail_changestatus = [
     // Sanitize fields (using wildcard).
     sanitizeQuery('*').escape(),
 
-    (req, res, next) => {
+    async (req, res, next) => {
 
         // Extract the validation errors from a request.
         const errors = validationResult(req);
 
         // if have logic errors
         if (!errors.isEmpty()) {
-            res.render('manager_schedule_movie', {title: "Wrong info typed!"});
+            res.render('admin_manage_user', {title: "Wrong info typed!", data:[], errors:[]});
         } else {
             var sql1 = "call admin_approve_user(?)";
             var sql2 = "call admin_decline_user(?)";            
             var choose = req.body.choose;
+            var target_username = req.body.target_username;
 
             if (choose == "Approve") {
                 sql = sql1;
             } else {
-                sql = sql2;
+                //logic constrain
+                sql3 = "select status from user where username = '" + target_username + "'";
+                //console.log(sql3);
+                const target_status = await dbQuery(sql3);
+                console.log(target_status[0]['status']);
+                if(target_status[0]['status'] === 'Approved') {
+                    res.render('admin_manage_user', {title: "You cannot decline an approved user.", data:[], errors:[]});
+                } else {
+                    sql = sql2;
+                }
+
             }
-            var target_username = req.body.target_username;
+            
             //console.log(req.body);
 
             db.query(sql, [target_username], (error, results, fields) => {
@@ -164,13 +176,20 @@ exports.user_detail_changestatus = [
 
 ];
 
+
 //screen 15
 exports.create_theater_get = async function (req, res, next) {
-    var sql1 = "Select Name from company";
-    var sql2 = "Select UserName from manager";
-    const companys = await dbQuery(sql1);
-    const managerNames = await dbQuery(sql2);
-    res.render('admin_create_theater', {title: "Create Theater", companys: companys, managerNames: managerNames, errors: []});
+    // if (req.session.isAdmin === null || req.session.isAdmin != 1) {
+    //     res.render('index', { title: 'Hello',
+    //         errors: [{msg: "You are not an administrator, you have no right to view the page!"}], sess: req.session});
+    // } else {
+        var sql1 = "Select Name from company";
+        var sql2 = "Select UserName from manager";
+        const companys = await dbQuery(sql1);
+        const managerNames = await dbQuery(sql2);
+        res.render('admin_create_theater', {title: "Create Theater", companys: companys, managerNames: managerNames, errors: []});
+    // }
+    
 }
 exports.create_theater_post = [
     // validate fields
@@ -184,7 +203,7 @@ exports.create_theater_post = [
     // Sanitize fields (using wildcard).
     sanitizeQuery('*').escape(),
 
-    (req, res, next) => {
+    async (req, res, next) => {
         // Extract the validation errors from a request.
         const errors = validationResult(req);
 
@@ -200,9 +219,20 @@ exports.create_theater_post = [
             var zipcode = req.body.zipcode;
             var capacity = req.body.capacity;
             var managerName = req.body.managerName;
+            var thnameConstrain = true;
 
-            console.log(req.body);
-            
+            //logic constrain: theater name must be unique within a company
+            var sql1 = "select TheaterName from theater where CompanyName = '" + companyName + "'";
+            const names = dbQuery(sql1);
+            for(var i = 0; i < names.length; i++) {
+                if(names[i]['theaterName'] === theaterName) {
+                    thnameConstrain = false;
+                }
+            }
+
+            if(!theaterName) {
+                return console.error("theater name is invaild");
+            }
             var sql = "call admin_create_theater(?,?,?,?,?,?,?,?)";
             db.query(sql, [theaterName, companyName, address, city, state, zipcode, capacity, managerName], (error, results, fields) => {
                 if (error) {
@@ -219,7 +249,14 @@ exports.create_theater_post = [
 
 //screen 17
 exports.create_movie_get = function (req, res, next) {
-    res.render('admin_create_movie', {title: 'Create Movie', errors: []});
+    if (req.session.isAdmin === null || req.session.isAdmin != 1) {
+        res.render('index', { title: 'Hello',
+            errors: [{msg: "You are not an administrator, you have no right to view the page!"}], sess: req.session});
+    }  else {
+        res.render('admin_create_movie', {title: 'Create Movie', errors: []});
+
+    }
+    
 }
 exports.create_movie_post = [
     // validate fields
