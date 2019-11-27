@@ -1,4 +1,5 @@
 let async = require('async');
+let session = require('express-session');
 
 const { body,validationResult, query } = require('express-validator/check');
 const { sanitizeBody, sanitizeQuery } = require('express-validator/filter');
@@ -47,25 +48,61 @@ exports.user_detail_update = [
             updatedResults = [];
             var userName = req.query.userName;
             var status = req.query.status;
-            var sortBy = req.query.sortBy;
             
-            //console.log(req.query);
-            var sortDirection;
-            direct *= -1;
-            
-            if(!sortBy) {
-                sortBy = '';
-            }
-            console.log(direct);
-            if(direct == -1) {
-                sortDirection = 'DESC';
-            } else {
-                sortDirection = 'ASC';
-            }
-            console.log(sortDirection);
+            req.session.userName = userName;
+            req.session.status = status;
+             
 
             //CREATE DEFINER=`root`@`localhost` PROCEDURE `admin_filter_user`(IN i_username VARCHAR(50), IN i_status CHAR(8), IN i_sortBy CHAR(50), IN i_sortDirection CHAR(4))
             var testSql = "call admin_filter_user(?,?,?,?)";
+            db.query(testSql, [userName, status, '', ''],(error, results, fields) => {
+                //'userType','ASC'
+                if (error) {
+                    return console.error(error.message);
+                }
+            });
+
+            var pollSql = "Select * From AdFilterUser";
+            db.query(pollSql,[] , (error, results, fields) => {
+                if (error) {
+                    return console.error(error.message);
+                }
+                updatedResults = [];
+                for (var i = 0; i < results.length; i++) {
+                    updatedResults[i] = results[i];
+                    
+                }
+                //console.log(results);
+                res.render('admin_manage_user', {title: 'Manage User', 
+                    data: updatedResults, errors: []});
+            });
+
+
+        }
+    }
+
+];
+
+exports.user_detail_sort = function(req, res, next) {
+    var userName = req.session.userName;
+    console.log(userName);
+    var status = req.session.status;
+    var sortBy = req.query.sortBy;
+    var sortDirection;
+    direct *= -1;
+            
+    if(!sortBy) {
+        sortBy = '';
+    }
+    console.log(direct);
+    if(direct == -1) {
+        sortDirection = 'DESC';
+    } else {
+        sortDirection = 'ASC';
+    }
+    console.log(sortDirection);
+
+    var testSql = "call admin_filter_user(?,?,?,?)";
             db.query(testSql, [userName, status, sortBy, sortDirection],(error, results, fields) => {
                 //'userType','ASC'
                 if (error) {
@@ -83,16 +120,12 @@ exports.user_detail_update = [
                     updatedResults[i] = results[i];
                     
                 }
-                console.log(results);
-                res.render('admin_manage_user', {title: 'Manage User', status: status,
+                //console.log(results);
+                res.render('admin_manage_user', {title: 'Manage User',
                     data: updatedResults, errors: []});
             });
 
-
-        }
-    }
-
-];
+}
 
 exports.user_detail_changestatus = [
     // Sanitize fields (using wildcard).
@@ -123,7 +156,7 @@ exports.user_detail_changestatus = [
                 if (error) {
                     return console.error(error.message);
                 }
-                res.redirect('/adminManageUser/getInfo');
+                res.redirect('/adminManageUser');
             })
             
         }

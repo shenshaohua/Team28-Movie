@@ -23,9 +23,9 @@ router.post('/managerScheduleMoviePlay', manager_controller.schedule_movie_post)
 
 
 // Get and post for admin manage user (screen 13)
-router.get('/adminManageUser/getInfo', admin_controller.user_detail_update);
-router.post('/adminManageUser/getInfo', admin_controller.user_detail_changestatus);
-//router.get('/adminManageUser/getSortedInfo', admin_controller.user_detail_sort);
+router.get('/adminManageUser', admin_controller.user_detail_update);
+router.post('/adminManageUser', admin_controller.user_detail_changestatus);
+router.get('/adminManageUser/sort', admin_controller.user_detail_sort);
 
 
 // Get and post for admin create theater (screen 15)

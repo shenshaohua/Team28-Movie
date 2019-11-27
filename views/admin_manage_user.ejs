@@ -8,7 +8,7 @@
 
 <h1><%= title %></h1>
 
-<form name="user_list" method="get" action="/adminManageUser/getInfo">
+<form name="user_list" method="get" action="/adminManageUser">
     Username<br>
     <input id="userName" type="text" name="userName"><br>
     Status<br>
@@ -19,11 +19,13 @@
         <option value="Pending">Pending</option>
     </select><br>
 
+   
+
     <button type="submit" class="btn btn-primary" value="Filter">Filter</button>
     
 </form>
 <br>
-<form name="approve" method="post" action="/adminManageUser/getInfo">
+<form name="approve" method="post" action="/adminManageUser">
     <button type="submit" class="btn btn-primary" value="Approve" name="choose">Approve</button>
     <button type="submit" class="btn btn-primary" value="Declined" name="choose">Decline</button>
 
@@ -32,10 +34,10 @@
     <table>
 
             <tr>
-              <th><a href="javascript:window.location.href='?userName='+document.getElementById('userName').value+'&status='+document.getElementById('status').value+'&sortBy=username'">Username</a></th> 
-              <th><a href="javascript:window.location.href='?userName='+document.getElementById('userName').value+'&status='+document.getElementById('status').value+'&sortBy=creditCardCount'">Credit Card Count</a></th>
-              <th><a href="javascript:window.location.href='?userName='+document.getElementById('userName').value+'&status='+document.getElementById('status').value+'&sortBy=userType'">User Type</a></th>
-              <th><a href="javascript:window.location.href='?userName='+document.getElementById('userName').value+'&status='+document.getElementById('status').value+'&sortBy=status'">Status</a></th>
+              <th><a href="/adminManageUser/sort?sortBy=userName">Username</a></th> 
+              <th><a href="/adminManageUser/sort?sortBy=creditCardCount">Credit Card Count</a></th>
+              <th><a href="/adminManageUser/sort?sortBy=userType">User Type</a></th>
+              <th><a href="/adminManageUser/sort?sortBy=status">Status</a></th>
             </tr>
           <% for (var i = 0; i < data.length; i++) { %>
           <tr>
