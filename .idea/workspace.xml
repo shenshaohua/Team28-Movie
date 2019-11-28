@@ -1,20 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="6960aecd-d19b-4af1-be76-9ba237c2f1e1" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/views/manager_schedule_movie.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/login_controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/login_controller.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/manager_controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/manager_controller.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/default_model.js" beforeDir="false" afterPath="$PROJECT_DIR$/model/default_model.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/common_template.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/common_template.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/index.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/index.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/login.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/login.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/logout_view.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/logout_view.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/manager_theater_overview.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/manager_theater_overview.ejs" afterDir="false" />
-    </list>
+    <list default="true" id="6960aecd-d19b-4af1-be76-9ba237c2f1e1" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,6 +32,13 @@
   <component name="Git.Settings">
     <option name="ROOT_SYNC" value="DONT_SYNC" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="D:\GT\Fall 2019\Movie project\.idea" />
+      </set>
+    </option>
   </component>
   <component name="PackageJsonUpdateNotifier">
     <dismissed value="$PROJECT_DIR$/package.json" />
