@@ -296,27 +296,26 @@ exports.manager_register_post = [
                 }
             });
             //console.log(users);
-            if (haveError === false) {
-                if (password.length < 8) {
-                    //console.log(password.length)
-                    res.render('manager_register', {title: "Password must be at least 8 characters!", company: companyList, errors: []});
-                } else if (zipcode.length != 5){
-                    res.render('manager_register', {title: "Zipcode must be 5 digits!", errors: []});
-                } else if (password!==cpassword) {
-                    //console.log(password);
-                    //console.log(cpassword);
-                    res.render('manager_register', {title: "Confirm password and password must be same!", company: companyList, errors: []});
-                } else {
-                    console.log(req.body);
-                    var sql = "call manager_only_register(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                    db.query(sql, [username, password, fName, lName, company, street, city, state, zipcode], (error, results, fields) => {
-                        if (error) {
-                            return console.error(error.message);
-                        }
-                        res.redirect('/login');
-                    });
-                }
-            }          
+            if (password.length < 8) {
+                //console.log(password.length)
+                res.render('manager_register', {title: "Password must be at least 8 characters!", company: companyList, errors: []});
+            } else if (zipcode.length != 5){
+                res.render('manager_register', {title: "Zipcode must be 5 digits!", errors: []});
+            } else if (password!==cpassword) {
+                //console.log(password);
+                //console.log(cpassword);
+                res.render('manager_register', {title: "Confirm password and password must be same!", company: companyList, errors: []});
+            } else {
+                console.log(req.body);
+                var sql = "call manager_only_register(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                db.query(sql, [username, password, fName, lName, company, street, city, state, zipcode], (error, results, fields) => {
+                    if (error) {
+                        return console.error(error.message);
+                    }
+                    res.redirect('/login');
+                });
+            }
+                     
         }
     }
 ];
