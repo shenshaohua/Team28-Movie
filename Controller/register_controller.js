@@ -130,6 +130,9 @@ exports.customer_register_post = [
                         }
                     }
                 });
+                console.log(cards);
+                
+                
                 //console.log(users);
                 if (password.length < 8) {
                     //console.log(password.length)
@@ -171,10 +174,43 @@ exports.customer_register_post = [
                 res.render('customer_register', {title: "You can only add 5 credit cards!", data: cards, errors: []});
             } else if(num.length != 16) {
                 res.render('customer_register', {title: "Credit card number must be 16 digits!", data: cards, errors: []});
+            } else if(cards.includes(num)){
+                res.render('customer_register', {title: "This card has been added!", data: cards, errors: []});
             } else {
-                cards.push(num);
-                console.log(cards);
-                res.render('customer_register', {title: "Customer Register", data: cards, errors: []});
+                var err = false;
+                var cardNums = [];
+                var query2 = "select CreditCardNum from creditcard"
+                db.query(query2, [], (error, results, fields) => {
+                    if (error) {
+                        return console.error(error.message);
+                    }
+                    console.log("successfully get the card numbers!");
+                    cardNums = results;
+                    console.log(cards);
+                    for (var i = 0; i < cardNums.length; i++) {
+                            //console.log(cardNums[i]['CreditCardNum']);
+                            //console.log(cardNums[0]['CreditCardNum']);
+                        //console.log(cards[j]);
+                        if (cardNums[i]['CreditCardNum'] == num) {
+                            console.log("found")
+                            //res.render('customer_register', {title: "Card number has been used!",  data:cards, errors: []});
+                            err = true;
+                            console.log(err);
+                            break;
+                        }  
+                    }
+                })
+                console.log(err);
+                if (err === true) {
+                    console.log("1");
+                    res.render('customer_register', {title: "Card number has been used!",  data: cards, errors: []});
+                } else {
+                    cards.push(num);
+                    console.log(cards);
+                    console.log("2");
+                    res.render('customer_register', {title: "Customer Register", data: cards, errors: []});
+                };
+                
             }
             
             
@@ -184,13 +220,13 @@ exports.customer_register_post = [
         } else if (select == 'remove1'){
             cards.splice(1, 1);
             res.render('customer_register', {title: "Customer Register", data: cards, errors: []});
-        } else if (select == 'remove1'){
+        } else if (select == 'remove2'){
             cards.splice(2, 1);
             res.render('customer_register', {title: "Customer Register", data: cards, errors: []});
-        } else if (select == 'remove1'){
+        } else if (select == 'remove3'){
             cards.splice(3, 1);
             res.render('customer_register', {title: "Customer Register", data: cards, errors: []});
-        } else if (select == 'remove1'){
+        } else if (select == 'remove4'){
             cards.splice(4, 1);
             res.render('customer_register', {title: "Customer Register", data: cards, errors: []});
         } else {
@@ -257,7 +293,7 @@ exports.manager_register_post = [
             var address = street + city + state + zipcode;
             console.log(address);
 
-            var haveError = false;
+            //var haveError = false;
 
             var users = [];
             var query = "select distinct username from user";
@@ -269,7 +305,7 @@ exports.manager_register_post = [
                 users = results;
                 for (var i = 0; i < users.length; i++) {
                     if (users[i]['username'] == username) {
-                        haveError = true;
+                        //haveError = true;
                         res.render('manager_register', {title: "User name has been used!", company: companyList, errors: []});
                         break;
                     }
