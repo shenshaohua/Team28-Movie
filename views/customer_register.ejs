@@ -8,34 +8,39 @@
 
 <h1><%= title %></h1>
 
+
 <form name="customer_register" method="POST">
-  First Name:
-  <input type="text" name="fname">
-  Last Name:
-  <input type="text" name="lname"><br>
+    
+  First Name
+  <input type="text" name="fName" id="fName">
+  Last Name
+  <input type="text" name="lName" id="lName"><br>
   <br>
-  Username:
-  <input type="text" name="username"><br>
+  Username
+  <input type="text" name="username" id="username"><br>
   <br>
-  Password:
-  <input type="text" name="password">
-  Confirm Password:
-  <input type="text" name="cpassword"><br>
+  Password
+  <input type="text" name="password" id="password">
+  Confirm Password
+  <input type="text" name="cpassword" id="cpassword"><br>
   
   <br>
   Credit Card#
   <br>
-  <% data.forEach(function(d) { %>
-      <%= d %> <br/>
-  <% }); %>
+  
+  <% for (var i = 0; i < data.length; i++) { %>
+    <%= data[i] %>
+    <button type="submit" class="btn btn-primary" name="select" value="remove<%=i%>" >Remove</button><br/>
+  <% }; %>
   <!--<p> <%= data %> </p>-->
   <br>
   <textarea name="cardNumber" cols="25" rows="1"></textarea>
   <button type="submit" class="btn btn-primary" value="add" name="select">Add</button>
-
+  <br>
   <button type="submit" class="btn btn-primary" value="register" name="select">Register</button>
   <br>
 
+  
   
 </form>
 
