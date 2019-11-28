@@ -8,7 +8,7 @@
 
 <h1><%= title %></h1>
 
-<form name="create_theater" method="post">
+<form name="create_theater" method="post" action="/adminCreateTheater">
     Name<br>
     <input type="text" name="theaterName"><br>
     Company<br>
@@ -87,6 +87,9 @@
     </select>
   
   <button type="submit" class="btn btn-primary" value="Create">Create</button>
+</form>
+
+<form name="back" action="/adminManageCompany/getInfo" method="get">
   <button type="submit" class="btn btn-primary" value="Back">Back</button>
 </form>
 

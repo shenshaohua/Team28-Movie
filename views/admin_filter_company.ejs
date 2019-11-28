@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+
+<h1><%= title %></h1>
+
+<form name="company_list" method="get" action="/adminManageCompany/getInfo">
+    Admin name(will be removed with user login):<br>
+        Name:
+    <select name="companyName" id="companyName">
+      <option value= 'ALL'>-ALL-</option>
+      <% for (var i = 0; i < companys.length; i++) { %>
+          <option value= "<%= companys[i]['Name'] %>" ><%= companys[i]['Name'] %></option>
+      <% } %>
+    </select><br>
+    # City Covered: <input type="text" name="mincityCovered" id="mincityCovered"> -- <input type="text" name="maxcityCovered" id="maxcityCovered"><br>
+    # Theaters： <input type="text" name="mintheaters" id="mintheaters"> -- <input type="text" name="maxtheaters" id="maxtheaters"><br>
+    # Employees: <input type="text" name="minemployees" id="minemployees"> -- <input type="text" name="maxemployees" id="maxemployees"><br>
+
+    <button type="submit" class="btn btn-primary" value="Filter">Filter</button>
+
+  </form>
+
+
+<form name="createTheater" method="get" action="/adminCreateTheater">
+  <button type="submit" class="btn btn-primary" value="createTheater" >Create Theater</button>
+  <button type="submit" class="btn btn-primary" value="Detail" formaction="/adminCompanyDetail/getInfo">Detail</button>
+
+
+
+  <%if (data.length > 0) { %>
+      <table>
+
+              <tr>
+                <th><a name="column" value="companyName" href="/adminManageCompany/sort?sortBy=comName">Name</a></th> 
+                <th><a name="column" value="cityCovered" href="/adminManageCompany/sort?sortBy=numCityCover">#CityCovered</a></th>
+                <th><a name="column" value="theaters" href="/adminManageCompany/sort?sortBy=numTheater">#Theaters</a></th>
+                <th><a name="column" value="employees" href="/adminManageCompany/sort?sortBy=numEmployee">#Employees</a></th>
+              </tr>
+            <% for (var i = 0; i < data.length; i++) { %>
+            <tr>
+              <td><input type="radio" name="target_companyName" id="target_companyName" value = "<%= data[i].comName %>"><%= data[i].comName%></td>
+              <td><%= data[i].numCityCover %></td>
+              <td><%= data[i].numTheater %></td>
+              <td><%= data[i].numEmployee %></td>
+            </tr>
+            <% } %>
+          </table>
+  <% } %>
+
+</form>
+
+
+
+<!-- back to screen 7 -->
+
+<!-- <form name="back" action="/" method="get">
+  <button type="submit" class="btn btn-primary" value="Back">Back</button>
+</form> -->
+<button type="submit" class="btn btn-primary" value="Back">Back</button>
+
+<%if (errors.length > 0) { %>
+  <ul>
+    <% for (var i = 0; i < errors.length; i++) { %>
+      <li>
+        <%=errors[i].msg%>
+      </li>
+    <% } %>
+  </ul>
+<% } %>
+
+</body>
+</html>
