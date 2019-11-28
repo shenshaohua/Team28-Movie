@@ -80,9 +80,23 @@
   <button type="submit" class="btn btn-primary" value="Visit">Log Visit</button>
 </form>
 <br><br>
-<form action="/" method="get">
-  <button type="submit" class="btn btn-primary" value="Back">Back</button>
-</form>
+<%if (sess.isCustomer && sess.isAdmin) { %>
+  <form action="/adminCustomer" method="get">
+    <button type="submit" class="btn btn-primary" value="Back">Back</button>
+  </form>
+<%} else if (sess.isCustomer && sess.isManager) { %>
+  <form action="/managerCustomer" method="get">
+    <button type="submit" class="btn btn-primary" value="Back">Back</button>
+  </form>
+<%} else if (sess.isCustomer) { %>
+  <form action="/customer" method="get">
+    <button type="submit" class="btn btn-primary" value="Back">Back</button>
+  </form>
+<%} else { %>
+  <form action="/user" method="get">
+    <button type="submit" class="btn btn-primary" value="Back">Back</button>
+  </form>
+<%}%>
 
 </body>
 </html>

@@ -1,7 +1,5 @@
 let async = require('async');
 let dateFormat = require('dateformat');
-let session = require("express-session");
-const { body, validationResult, query,sanitizeBody, sanitizeQuery } = require('express-validator');
 const dbquery = function (sql, values) {
     return new Promise((resolve, reject) => {
         db.query(sql,values, (err, rows) => {
@@ -62,7 +60,7 @@ exports.customerMovieFilterGet = async function (req, res, next) {
     data = await dbquery(pollSql, []);
     pollSql = "select CreditCardNum from creditcard where CreditCardOwner = \"" + username + "\";";
     cards = await dbquery(pollSql, []);
-    res.render('customer_explore_movie', {title: "Explore Movie", movies: movies, companies: companies,states: states,data: data, cards: cards});
+    res.render('customer_explore_movie', {title: "Explore Movie", sess: req.session, movies: movies, companies: companies,states: states,data: data, cards: cards});
 };
 exports.customerViewMovie = [
     (req, res, next) => {
@@ -104,6 +102,6 @@ exports.customerViewHistory = function (req, res, next) {
         if (error) {
             return console.error(error.message);
         }
-        res.render('view_history', {title: "Explore Movie", data: results});
+        res.render('view_history', {title: "Explore Movie", sess: req.session, data: results});
     });
 };

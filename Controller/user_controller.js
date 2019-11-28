@@ -56,7 +56,7 @@ exports.userExploreTheaterGet = async function (req, res, next) {
         mm='0'+mm
     }
     today = yyyy+'-'+mm+'-'+dd;
-    res.render('user_explore_theater',{title: "Explore Theater", theaters:theaters, states: states, companies: companies, data: data, today: today});
+    res.render('user_explore_theater',{title: "Explore Theater", sess:req.session, theaters:theaters, states: states, companies: companies, data: data, today: today});
 };
 exports.userVisitTheater = [
     (req, res, next) => {
@@ -97,6 +97,7 @@ exports.userVisitHistoryGet = async function (req, res, next) {
             companyVisit.push(rows[i]['comName']);
         }
     }
+    var sess = req.session;
     db.query(testSql, [], (error, results, fields) => {
         if (error) {
             return console.error(error.message);
