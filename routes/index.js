@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-var manager_controller =require('../Controller/manager_controller');
+var func_controller = require('../Controller/func_controller');
+var manager_controller = require('../Controller/manager_controller');
 var admin_controller = require('../Controller/admin_controller');
 var login_controller = require('../Controller/login_controller');
 const customer_controller = require("../Controller/customer_controller");
@@ -20,6 +21,24 @@ router.post('/login', login_controller.login_post);
 
 // logout page
 router.get('/logout', login_controller.logout_page);
+
+//admin-only(screen 7)
+router.get('/adminOnly', func_controller.admin_only);
+
+//admin-costomer(screen 8)
+router.get('/adminCustomer', func_controller.admin_customer);
+
+//manager-only(screen 9)
+router.get('/managerOnly', func_controller.manager_only);
+
+//manager-costomer(screen 10)
+router.get('/managerCustomer', func_controller.manager_customer);
+
+//customer(screen 11)
+router.get('/customer', func_controller.customer);
+
+//customer(screen 12)
+router.get('/user', func_controller.user);
 
 
 // Get and post for admin manage user (screen 13)
@@ -49,8 +68,7 @@ router.get('/managerScheduleMoviePlay', manager_controller.schedule_movie_get);
 // Get and post for manager schedule movie
 router.post('/managerScheduleMoviePlay', manager_controller.schedule_movie_post);
 
-// GET request for rendering a initial view
-router.get('/theaterDetail', manager_controller.theater_detail_get);
+
 //20
 router.get('/customer_explore_movie',customer_controller.customerMovieFilterGet);
 router.get('/customer_explore_movie/view_movie',customer_controller.customerViewMovie);

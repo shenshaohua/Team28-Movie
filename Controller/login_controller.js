@@ -52,12 +52,30 @@ exports.login_post = [
                             req.session.isAdmin = results[0]['isAdmin'];
                             req.session.isManager = results[0]['isManager'];
                             var identities = "";
-                            if (req.session.isCustomer && req.session.isCustomer === 1) identities += "Customer ";
-                            if (req.session.isAdmin && req.session.isCustomer === 1) identities += "Admin ";
-                            if (req.session.isManager && req.session.isCustomer === 1) identities += "Manager";
-                            if (identities === "") identities = "User";
-                            req.session.identities = identities;
-                            res.redirect('/');
+                            if (req.session.isAdmin && req.session.isAdmin === 1) {
+                                if(req.session.isCustomer && req.session.isCustomer === 1) {
+                                    res.redirect('/adminCustomer');
+                                } else {
+                                    res.redirect('/adminOnly');
+                                }
+                            } else if(req.session.isManager && req.session.isManager === 1) {
+                                if(req.session.isCustomer && req.session.isCustomer === 1) {
+                                    res.redirect('/managerCustomer');
+                                } else {
+                                    res.redirect('/managerOnly');
+                                }
+                            } else if(req.session.isCustomer && req.session.isCustomer === 1){
+                                res.redirect('/customer');
+                            } else {
+                                res.redirect('/user')
+                            }
+
+                            // if (req.session.isCustomer && req.session.isCustomer === 1) identities += "Customer ";
+                            // if (req.session.isAdmin && req.session.isCustomer === 1) identities += "Admin ";
+                            // if (req.session.isManager && req.session.isCustomer === 1) identities += "Manager";
+                            // if (identities === "") identities = "User";
+                            // req.session.identities = identities;
+                            // res.redirect('/');
                         }
                     });
                 }
