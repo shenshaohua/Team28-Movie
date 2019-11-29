@@ -8,7 +8,7 @@
 
 <h1><%= title %></h1>
 
-<form name="manager_register" method="POST">
+<form name="mc_register" method="POST">
   First Name
   <input type="text" name="fName">
   Last Name
@@ -89,6 +89,19 @@
 </select>
   Zipcode
   <input type="text" name="zipcode"><br>
+  <br>
+  Credit Card#
+  <br>
+  
+  <% for (var i = 0; i < data.length; i++) { %>
+    <%= data[i] %>
+    <button type="submit" class="btn btn-primary" name="select" value="remove<%=i%>" >Remove</button><br/>
+  <% }; %>
+  <!--<p> <%= data %> </p>-->
+  <br>
+  <textarea name="cardNumber" cols="25" rows="1"></textarea>
+  <button type="submit" class="btn btn-primary" value="add" name="select">Add</button>
+  <br>
   <br>
   <button type="submit" class="btn btn-primary" value="register" name="select">Register</button><br>
   <br>

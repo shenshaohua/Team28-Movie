@@ -40,5 +40,9 @@ router.get('/managerRegister', register_controller.manager_register_get);
 
 router.post('/managerRegister', register_controller.manager_register_post);
 
+router.get('/mcRegister', register_controller.mc_register_get);
+
+router.post('/mcRegister', register_controller.mc_register_post);
+
 
 module.exports = router;

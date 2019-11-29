@@ -1,6 +1,17 @@
 let async = require('async');
 const { body,validationResult, query } = require('express-validator/check');
 const { sanitizeBody, sanitizeQuery } = require('express-validator/filter');
+const dbquery = function (sql, values) {
+    return new Promise((resolve, reject) => {
+        db.query(sql,values, (err, rows) => {
+            if (err) {
+                reject(err)
+            } else {
+                resolve(rows)
+            }
+        });
+    })
+};
 
 let session = require("express-session");
 
@@ -77,7 +88,7 @@ exports.user_register_post = [
     }
 ];
 
-exports.customer_register_get = function(req, res, next) {
+exports.customer_register_get = async function(req, res, next) {
     cards = [];
     res.render('customer_register', {title: "Customer Register", data:cards, errors: []});
     
@@ -95,7 +106,7 @@ exports.customer_register_post = [
     // Sanitize fields (using wildcard).
     sanitizeQuery('*').escape(),
 
-    (req, res, next) => {
+    async (req, res, next) => {
         var select = req.body.select;
         console.log(select);
         if (select == 'register') {
@@ -177,7 +188,7 @@ exports.customer_register_post = [
             } else if(cards.includes(num)){
                 res.render('customer_register', {title: "This card has been added!", data: cards, errors: []});
             } else {
-                var err = false;
+                /*var err = false;
                 var cardNums = [];
                 var query2 = "select CreditCardNum from creditcard"
                 db.query(query2, [], (error, results, fields) => {
@@ -199,9 +210,26 @@ exports.customer_register_post = [
                             break;
                         }  
                     }
-                })
-                console.log(err);
-                if (err === true) {
+                })*/
+                //console.log(err);
+                var cardNums = [];
+                var query2 = "select CreditCardNum from creditcard;";
+                var results = await dbquery(query2, []);
+                console.log(results);
+                for (var i = 0; i < results.length; i++) {
+                    if (!cardNums.includes(results[i]['CreditCardNum'])) {
+                        cardNums.push(results[i]['CreditCardNum']);
+                    }
+                }
+                //console.log(cardNums);
+                var err = false;
+                for (var i = 0; i < cardNums.length; i++) {
+                    if (cardNums[i] == num) {
+                        err = true;
+                        break;
+                    }
+                }
+                if (err) {
                     console.log("1");
                     res.render('customer_register', {title: "Card number has been used!",  data: cards, errors: []});
                 } else {
@@ -269,7 +297,7 @@ exports.manager_register_post = [
     // Sanitize fields (using wildcard).
     sanitizeQuery('*').escape(),
 
-    (req, res, next) => {
+    async (req, res, next) => {
 
         // Extract the validation errors from a request.
         const errors = validationResult(req);
@@ -311,7 +339,7 @@ exports.manager_register_post = [
                     }
                 }
             });
-            var addresses = []
+            /*var addresses = []
             var query2 = "select Street, City, State, Zipcode from manager";
             db.query(query2, [], (error, results, fields) => {
                 if (error) {
@@ -327,32 +355,255 @@ exports.manager_register_post = [
                         haveError = true;
                         //console.log("found");
                         res.render('manager_register', {title: "Address has been used!", company: companyList, errors: []});
+                        return;
+                    }
+                }
+            });*/
+            var addresses = [];
+                var query2 = "select Street, City, State, Zipcode from manager;";
+                var results = await dbquery(query2, []);
+                console.log(results);
+                for (var i = 0; i < results.length; i++) {
+                    
+                    addresses.push(results[i]['Street'] + results[i]['City'] + results[i]['State'] + results[i]['Zipcode']);
+                    
+                }
+                console.log(addresses);
+                var err = false;
+                for (var i = 0; i < addresses.length; i++) {
+                    if (addresses[i] == address) {
+                        err = true;
                         break;
                     }
                 }
-            });
+
             //console.log(users);
-            if (password.length < 8) {
-                //console.log(password.length)
-                res.render('manager_register', {title: "Password must be at least 8 characters!", company: companyList, errors: []});
-            } else if (zipcode.length != 5){
-                res.render('manager_register', {title: "Zipcode must be 5 digits!", errors: []});
-            } else if (password!==cpassword) {
-                //console.log(password);
-                //console.log(cpassword);
-                res.render('manager_register', {title: "Confirm password and password must be same!", company: companyList, errors: []});
+            if (err == false) {
+                if (password.length < 8) {
+                    //console.log(password.length)
+                    res.render('manager_register', {title: "Password must be at least 8 characters!", company: companyList, errors: []});
+                } else if (zipcode.length != 5){
+                    res.render('manager_register', {title: "Zipcode must be 5 digits!", errors: []});
+                } else if (password!==cpassword) {
+                    //console.log(password);
+                    //console.log(cpassword);
+                    res.render('manager_register', {title: "Confirm password and password must be same!", company: companyList, errors: []});
+                } else {
+                    console.log(req.body);
+                    var sql = "call manager_only_register(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    db.query(sql, [username, password, fName, lName, company, street, city, state, zipcode], (error, results, fields) => {
+                        if (error) {
+                            return console.error(error.message);
+                        }
+                        res.redirect('/login');
+                    });
+                }
             } else {
-                console.log(req.body);
-                var sql = "call manager_only_register(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                db.query(sql, [username, password, fName, lName, company, street, city, state, zipcode], (error, results, fields) => {
+                res.render('manager_register', {title: "Address has been used!", company: companyList, errors: []});
+            }
+            
+                     
+        }
+    }
+];
+
+exports.mc_register_get = function(req, res, next) {
+    cards = [];
+    var sql = "Select Name from company";
+    //var company = [];
+    db.query(sql, [], (error, results, fields) => {
+        if (error) {
+            return console.error(error.message);
+        }
+        console.log("successfully retrieved the company list!");
+        //console.log(results);
+        // console.log(results.length);
+        companyList = results;
+        //console.log(movies);
+        res.render('mc_register', {title: "Manager-Customer Register", company: companyList, data: cards, errors: []});
+    });
+    
+};
+
+exports.mc_register_post = [
+    body('fName', 'First name must not be empty.').isLength({ min: 1 }).trim(),
+    body('lName', 'Last name must not be empty.').isLength({ min: 1 }).trim(),
+    body('username', 'User name must not be empty.').isLength({ min: 1 }).trim(),
+    body('password', 'Password must not be empty.').isLength({ min: 1 }).trim(),
+    body('cpassword', 'Confirm password must not be empty.').isLength({ min: 1 }).trim(),
+    body('company', 'Company must not be empty.').isLength({ min: 1 }).trim(),
+    body('street', 'Street address must not be empty.').isLength({ min: 1 }).trim(),
+    body('city', 'City must not be empty.').isLength({ min: 1 }).trim(),
+    body('state', 'state must not be empty.').isLength({ min: 1 }).trim(),
+    body('zipcode', 'Zipcode must not be empty.').isLength({ min: 1 }).trim(),
+
+
+    // Sanitize fields (using wildcard).
+    sanitizeQuery('*').escape(),
+
+    async (req, res, next) => {
+        var select = req.body.select;
+        console.log(select);
+        if (select == 'register') {
+            // Extract the validation errors from a request.
+            const errors = validationResult(req);
+
+            // if have logic errors
+            if (!errors.isEmpty()) {
+                
+                res.render('mc_register', {title: "Wrong info typed!", company: companyList, data:cards, errors: errors.array()});
+                
+            } else {
+                var fName = req.body.fName;
+                var lName = req.body.lName;
+                var username = req.body.username;
+                var password = req.body.password;
+                var cpassword = req.body.cpassword;
+                var company = req.body.company;
+                var street = req.body.street;
+                var city = req.body.city;
+                var state = req.body.state;
+                var zipcode = req.body.zipcode;
+                var address = street + city + state + zipcode;
+                console.log(address);
+
+                //var haveError = false;
+
+                var users = [];
+                var query = "select distinct username from user";
+                db.query(query, [], (error, results, fields) => {
                     if (error) {
                         return console.error(error.message);
                     }
-                    res.redirect('/login');
+                    console.log("successfully get the user names!");
+                    users = results;
+                    for (var i = 0; i < users.length; i++) {
+                        if (users[i]['username'] == username) {
+                            //haveError = true;
+                            res.render('mc_register', {title: "User name has been used!", company: companyList, data: cards, errors: []});
+                            break;
+                        }
+                    }
                 });
+                var addresses = [];
+                    var query2 = "select Street, City, State, Zipcode from manager;";
+                    var results = await dbquery(query2, []);
+                    console.log(results);
+                    for (var i = 0; i < results.length; i++) {
+                        
+                        addresses.push(results[i]['Street'] + results[i]['City'] + results[i]['State'] + results[i]['Zipcode']);
+                        
+                    }
+                    console.log(addresses);
+                    var err = false;
+                    for (var i = 0; i < addresses.length; i++) {
+                        if (addresses[i] == address) {
+                            err = true;
+                            break;
+                        }
+                    }
+
+                //console.log(users);
+                if (err == false) {
+                    if (password.length < 8) {
+                        //console.log(password.length)
+                        res.render('mc_register', {title: "Password must be at least 8 characters!", company: companyList, data: cards, errors: []});
+                    } else if (zipcode.length != 5){
+                        res.render('mc_register', {title: "Zipcode must be 5 digits!", errors: []});
+                    } else if (password!==cpassword) {
+                        //console.log(password);
+                        //console.log(cpassword);
+                        res.render('mc_register', {title: "Confirm password and password must be same!", company: companyList, data:cards, errors: []});
+                    } else if (cards.length == 0) {
+                        res.render('mc_register', {title: "You must enter a credit card!", data: cards, company: companyList, errors: []});
+                    } else {
+                        console.log(req.body);
+                        var sql = "call manager_customer_register(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                        db.query(sql, [username, password, fName, lName, company, street, city, state, zipcode], (error, results, fields) => {
+                            if (error) {
+                                return console.error(error.message);
+                            }
+                            //res.redirect('/login');
+                        });
+                        if (cards.length != 0) {
+                            var sql = "call manager_customer_add_creditcard(?, ?)";
+                            for (var i = 0; i < cards.length; i++) {
+                                db.query(sql, [username, cards[i]], (error, results, fields) => {
+                                    if (error) {
+                                        return console.error(error.message);
+                                    }
+                                });
+                            }
+                        }
+                        cards = [];
+                        res.redirect('/login');
+                    }
+                } else {
+                    res.render('mc_register', {title: "Address has been used!", company: companyList, data: cards, errors: []});
+                }
+                
+                        
             }
-                     
-        }
+        } else if (select == 'add'){
+            
+            var num = req.body.cardNumber;
+            if (cards.length == 5) {
+                res.render('mc_register', {title: "You can only add 5 credit cards!", company: companyList, data: cards, errors: []});
+            } else if(num.length != 16) {
+                res.render('mc_register', {title: "Credit card number must be 16 digits!", company: companyList, data: cards, errors: []});
+            } else if(cards.includes(num)){
+                res.render('mc_register', {title: "This card has been added!", company: companyList, data: cards, errors: []});
+            } else {
+                
+                //console.log(err);
+                var cardNums = [];
+                var query2 = "select CreditCardNum from creditcard;";
+                var results = await dbquery(query2, []);
+                console.log(results);
+                for (var i = 0; i < results.length; i++) {
+                    if (!cardNums.includes(results[i]['CreditCardNum'])) {
+                        cardNums.push(results[i]['CreditCardNum']);
+                    }
+                }
+                //console.log(cardNums);
+                var err = false;
+                for (var i = 0; i < cardNums.length; i++) {
+                    if (cardNums[i] == num) {
+                        err = true;
+                        break;
+                    }
+                }
+                if (err) {
+                    console.log("1");
+                    res.render('mc_register', {title: "Card number has been used!", company: companyList, data: cards, errors: []});
+                } else {
+                    cards.push(num);
+                    console.log(cards);
+                    console.log("2");
+                    res.render('mc_register', {title: "Manager-Customer Register", company: companyList, data: cards, errors: []});
+                };
+                
+            } 
+            
+        } else if (select == 'remove0'){
+            cards.splice(0, 1);
+            res.render('mc_register', {title: "Manager-Customer Register", company: companyList, data: cards, errors: []});
+        } else if (select == 'remove1'){
+            cards.splice(1, 1);
+            res.render('mc_register', {title: "Manager-Customer Register", company: companyList, data: cards, errors: []});
+        } else if (select == 'remove2'){
+            cards.splice(2, 1);
+            res.render('mc_register', {title: "Manager-Customer Register", company: companyList, data: cards, errors: []});
+        } else if (select == 'remove3'){
+            cards.splice(3, 1);
+            res.render('mc_register', {title: "Manager-Customer Register", company: companyList, data: cards, errors: []});
+        } else if (select == 'remove4'){
+            cards.splice(4, 1);
+            res.render('mc_register', {title: "Manager-Customer Register", company: companyList, data: cards, errors: []});
+        } else {
+
+        };   
+        
     }
 ];
 
