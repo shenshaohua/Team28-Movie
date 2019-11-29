@@ -52,24 +52,28 @@ exports.login_post = [
                             req.session.isAdmin = results[0]['isAdmin'];
                             req.session.isManager = results[0]['isManager'];
                             var identities = "";
+                            var url;
+
                             if (req.session.isAdmin && req.session.isAdmin === 1) {
                                 if(req.session.isCustomer && req.session.isCustomer === 1) {
-                                    res.redirect('/adminCustomer');
+                                    url = '/adminCustomer';
                                 } else {
-                                    res.redirect('/adminOnly');
+                                    url = '/adminOnly';
                                 }
                             } else if(req.session.isManager && req.session.isManager === 1) {
                                 if(req.session.isCustomer && req.session.isCustomer === 1) {
-                                    res.redirect('/managerCustomer');
+                                    url = '/managerCustomer';
                                 } else {
-                                    res.redirect('/managerOnly');
+                                    url = '/managerOnly';
                                 }
                             } else if(req.session.isCustomer && req.session.isCustomer === 1){
-                                res.redirect('/customer');
+                                url = '/customer';
                             } else {
-                                res.redirect('/user')
+                                url = '/user';
                             }
 
+                            req.session.funcUrl = url;
+                            res.redirect(url);
                             // if (req.session.isCustomer && req.session.isCustomer === 1) identities += "Customer ";
                             // if (req.session.isAdmin && req.session.isCustomer === 1) identities += "Admin ";
                             // if (req.session.isManager && req.session.isCustomer === 1) identities += "Manager";
@@ -91,6 +95,8 @@ exports.logout_page = function(req, res, next) {
     req.session.isAdmin = null;
     req.session.isManager = null;
     req.session.identities = null;
+    req.session.funcUrl = null;
+
     res.render('logout_view');
 };
 

@@ -40,7 +40,7 @@
             </tr>
           <% for (var i = 0; i < data.length; i++) { %>
           <tr>
-            <td><input type="radio" name="target_username" value = <%= data[i].username %>><%= data[i].username %></td>
+            <td><input type="radio" name="target_username" value = "<%= data[i].username %>"><%= data[i].username %></td>
             <td><%= data[i].creditCardCount %></td>
             <td><%= data[i].userType %></td>
             <td><%= data[i].STATUS %></td>
@@ -50,7 +50,9 @@
 <% } %>
 </form>
 <br>
-<button type="submit" class="btn btn-primary" value="Back">Back</button>
+<form action= "<%= url%>" method="get">
+  <button type="submit" class="btn btn-primary btn-lg">Back</button>
+</form>
 
 <%if (errors.length > 0) { %>
   <ul>

@@ -75,7 +75,7 @@ exports.user_detail_update = [
                 }
                 //console.log(results);
                 res.render('admin_manage_user', {title: 'Manage User', 
-                    data: updatedResults, errors: []});
+                    data: updatedResults, url: req.session.funcUrl, errors: []});
             });
 
 
@@ -123,7 +123,7 @@ exports.user_detail_sort = function(req, res, next) {
                 }
                 //console.log(results);
                 res.render('admin_manage_user', {title: 'Manage User',
-                    data: updatedResults, errors: []});
+                    data: updatedResults, url: req.session.funcUrl, errors: []});
             });
 
 }
@@ -154,7 +154,7 @@ exports.user_detail_changestatus = [
                 const target_status = await dbQuery(sql3);
                 console.log(target_status[0]['status']);
                 if(target_status[0]['status'] === 'Approved') {
-                    res.render('admin_manage_user', {title: "You cannot decline an approved user.", data:[], errors:[]});
+                    res.render('admin_manage_user', {title: "You cannot decline an approved user.", data:[], url: req.session.funcUrl, errors:[]});
                 } else {
                     sql = sql2;
                 }
@@ -251,7 +251,7 @@ exports.create_movie_get = function (req, res, next) {
         res.render('index', { title: 'Hello',
             errors: [{msg: "You are not an administrator, you have no right to view the page!"}], sess: req.session});
     }  else {
-        res.render('admin_create_movie', {title: 'Create Movie', errors: []});
+        res.render('admin_create_movie', {title: 'Create Movie', url: req.session.funcUrl, errors: []});
 
     }
     
@@ -272,7 +272,7 @@ exports.create_movie_post = [
 
         // if have logic errors
         if (!errors.isEmpty()) {
-            res.render('admin_create_movie', {title: "Wrong info typed!", errors: errors.array()});
+            res.render('admin_create_movie', {title: "Wrong info typed!", url: req.session.funcUrl, errors: errors.array()});
         } else {
             var movieName = req.body.movieName;
             var duration = req.body.duration;
@@ -302,9 +302,16 @@ exports.manage_company_get = [
 
         if (!errors.isEmpty()) {
             res.render('admin_filter_company', {title: 'Manage Company',
-                data: [], errors: errors.array()});
+                data: [], url: req.session.funcUrl, errors: errors.array()});
         }
         else if (isEmptyObj(req.query)) {
+            
+            if (req.session.isAdmin === null || req.session.isAdmin != 1) {
+                res.render('index', { title: 'Hello',
+                    errors: [{msg: "You are not an administrator, you have no right to view the page!"}], sess: req.session});
+            } 
+
+
             var sql = "Select Name from company";
 
             db.query(sql, [], (error, results1, fields) => {
@@ -337,7 +344,7 @@ exports.manage_company_get = [
             //console.log(results2);
             //success!
 
-            res.render('admin_filter_company', {title: 'Manage Company', companys: companys1, data: results2, errors: []})
+            res.render('admin_filter_company', {title: 'Manage Company', companys: companys1, data: results2, url: req.session.funcUrl, errors: []})
             });
 
 
@@ -397,7 +404,7 @@ exports.manage_company_get = [
             //console.log(results);
 
             res.render('admin_filter_company', {title: 'Manage Company', companys: companys1,
-                data: results, errors: []});
+                data: results, url: req.session.funcUrl, errors: []});
             });
         }
     }
@@ -461,7 +468,7 @@ exports.company_detail_sort = function(req, res, next) {
 
     console.log(results);
     res.render('admin_filter_company', {title: 'Manage Company', companys: companys1,
-        data: results, errors: []});
+        data: results, url: req.session.funcUrl, errors: []});
     });
 
 }
@@ -477,6 +484,13 @@ exports.comDetail_get =  async (req, res, next) => {
         if (!errors.isEmpty()) {
             res.render('company_detail', {title: "Wrong info typed!", data:[], errors:[]});
         } else {
+
+            if (req.session.isAdmin === null || req.session.isAdmin != 1) {
+                res.render('index', { title: 'Hello',
+                    errors: [{msg: "You are not an administrator, you have no right to view the page!"}], sess: req.session});
+            }
+ 
+
             let target_companyName = req.query.target_companyName;
             // console.log(target_companyName);
 
