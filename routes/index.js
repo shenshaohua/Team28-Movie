@@ -10,7 +10,7 @@ const user_controller = require("../Controller/user_controller");
 var register_controller =require('../Controller/register_controller');
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Hello', errors: [], sess: req.session});
+    res.render('index', { title: 'Atlanta Movie Login', errors: [], sess: req.session});
             //sess: {username: "yo", status: "approved", identites: "??"}
 });
 
