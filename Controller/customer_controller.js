@@ -16,7 +16,6 @@ var companies = ["ALL"];
 var states = ["ALL"];
 var cards = [];
 var data;
-var count = 0;
 //Screen 20 implementation
 exports.customerMovieFilterGet = async function (req, res, next) {
     // call procedure first, create the table that has information
@@ -63,28 +62,30 @@ exports.customerMovieFilterGet = async function (req, res, next) {
     res.render('customer_explore_movie', {title: "Explore Movie", sess: req.session, movies: movies, companies: companies,states: states,data: data, cards: cards});
 };
 exports.customerViewMovie = [
-    (req, res, next) => {
-        var today = new Date();
-        var time = today.getHours() + today.getMinutes() + today.getSeconds();
-        if (time == 0) {
-            count = 0;
-        }
+    async (req, res, next) => {
+        var username = req.session.username;
         if (!req.query.view_movie) {
             res.render('view_movie', {error: 1, movName: "",left:0});
-        } else if (count == 3) {
-            res.render('view_movie', {error: 2, movName: "",left:0});
         } else {
-            count ++;
             var view_movie = req.query.view_movie;
-            var card = req.query.cardNumber;
             var selected = data[parseInt(view_movie)];
-            var sql = "call customer_view_mov(?,?,?,?,?,?);";
-            db.query(sql, [card, selected['movName'], selected['movReleaseDate'], selected['thName'], selected['comName'], selected['movPlayDate']], (error, results, fields) => {
-                if (error) {
-                    return console.error(error.message);
-                }
-            });
-            res.render('view_movie', {error: 0, movName: selected['movName'],left:3-count});
+            var playDate = dateFormat(selected['movPlayDate'],"yyyy-mm-dd");
+            var sql = "select count(*) from (select * from creditcardusage natural join creditcard) t where creditcardowner = \"" + username + "\" and date = \"" + playDate + "\";";
+            var count = await dbquery(sql, []);
+            if (parseInt(count[0]['count(*)']) == 3) {
+                res.render('view_movie', {error: 2, movName: "", left: 0});
+            } else {
+                var view_movie = req.query.view_movie;
+                var card = req.query.cardNumber;
+                var selected = data[parseInt(view_movie)];
+                var sql = "call customer_view_mov(?,?,?,?,?,?);";
+                db.query(sql, [card, selected['movName'], selected['movReleaseDate'], selected['thName'], selected['comName'], selected['movPlayDate']], (error, results, fields) => {
+                    if (error) {
+                        return console.error(error.message);
+                    }
+                });
+                res.render('view_movie', {error: 0, movName: selected['movName']});
+            }
         }
     }
 ];
