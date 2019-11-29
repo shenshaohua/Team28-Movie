@@ -107,25 +107,28 @@ exports.customer_register_post = [
     sanitizeQuery('*').escape(),
 
     async (req, res, next) => {
+        var fName;
+        var lName;
+        var username;
+        var password;
+        var cpassword;
         var select = req.body.select;
         console.log(select);
         if (select == 'register') {
             // Extract the validation errors from a request.
             const errors = validationResult(req);
-            var fName = req.body.fName;
-            var lName = req.body.lName;
-            var username = req.body.username;
-            var password = req.body.password;
-            var cpassword = req.body.cpassword;
+            fName = req.body.fName;
+            lName = req.body.lName;
+            username = req.body.username;
+            password = req.body.password;
+            cpassword = req.body.cpassword;
             // if have logic errors
             if (!errors.isEmpty()) {
                 cards = [];
-                res.render('customer_register', {title: "Wrong info typed!", data:cards, fname:"", errors: errors.array()});
+                res.render('customer_register', {title: "Wrong info typed!", data:cards, fname:fName, errors: errors.array()});
                 
             } else {
                 
-                
-
                 var users = [];
                 var query = "select distinct username from user"
                 db.query(query, [], (error, results, fields) => {
@@ -136,24 +139,23 @@ exports.customer_register_post = [
                     users = results;
                     for (var i = 0; i < users.length; i++) {
                         if (users[i]['username'] == username) {
-                            res.render('customer_register', {title: "User name has been used!", data:cards, fname: "", errors: []});
+                            res.render('customer_register', {title: "User name has been used!", data:cards, fname: fName, errors: []});
                             break;
                         }
                     }
                 });
                 console.log(cards);
                 
-                
                 //console.log(users);
                 if (password.length < 8) {
                     //console.log(password.length)
-                    res.render('customer_register', {title: "Password must be at least 8 characters!", data:cards, fname: "", errors: []});
+                    res.render('customer_register', {title: "Password must be at least 8 characters!", data:cards, fname: fName, errors: []});
                 } else if (password!==cpassword) {
                     //console.log(password);
                     //console.log(cpassword);
-                    res.render('customer_register', {title: "Confirm password and password must be same!", data:cards, fname: "", errors: []});
+                    res.render('customer_register', {title: "Confirm password and password must be same!", data:cards, fname: fName, errors: []});
                 } else if (cards.length == 0) {
-                    res.render('customer_register', {title: "You must enter a credit card!", data: cards, fname: "", errors: []});
+                    res.render('customer_register', {title: "You must enter a credit card!", data: cards, fname: fName, errors: []});
                 } else {
                     console.log(req.body);
                     var sql = "call customer_only_register(?, ?, ?, ?)";
