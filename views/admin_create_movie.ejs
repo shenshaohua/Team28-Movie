@@ -19,6 +19,10 @@
   <button type="submit" class="btn btn-primary" value="Add">Add</button>
 </form>
 
+<form name="back" action= "<%= url%>" method="get">
+  <button type="submit" class="btn btn-primary" value="Back">Back</button>
+</form>
+
 <%if (errors.length > 0) { %>
   <ul>
     <% for (var i = 0; i < errors.length; i++) { %>

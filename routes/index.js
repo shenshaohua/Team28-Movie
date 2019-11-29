@@ -55,6 +55,14 @@ router.post('/adminCreateTheater', admin_controller.create_theater_post);
 router.get('/adminCreateMovie', admin_controller.create_movie_get);
 router.post('/adminCreateMovie', admin_controller.create_movie_post);
 
+// Get and post for admin manage company (screen 14)
+router.get('/adminManageCompany/getInfo', admin_controller.manage_company_get);
+router.get('/adminManageCompany/sort', admin_controller.company_detail_sort);
+
+// Get and post for admin manage company (screen 16 is connected to screen 14 with button "Detail", will go back to screen 14 with button "Back")
+router.get('/adminCompanyDetail/getInfo', admin_controller.comDetail_get);
+
+
 
 // GET request for rendering a initial view
 router.get('/theaterDetail', manager_controller.theater_detail_get);

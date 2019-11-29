@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <style>
+    table, th, td {
+      border: 1px solid black;
+    }
+    </style>
+</head>
+<body>
+
+<h1><%= title %></h1>
+
+<form name="company_detail" method="get" action="/adminCompanyDetail/getInfo">
+  Admin name(will be removed with user login):<br><br>
+  Name &nbsp&nbsp&nbsp&nbsp&nbsp <%= cop%><br><br>
+
+  Employees &nbsp&nbsp
+  <%if (dataE.length > 0) { %>
+      <% for (var i = 0; i < dataE.length - 1; i++) { %>
+          <%= dataE[i].empFirstname %>&nbsp<%= dataE[i].empLastname %>,
+      <% } %>
+      <%= dataE[dataE.length - 1].empFirstname %>&nbsp<%= dataE[dataE.length - 1].empLastname %>
+  <% } %><br><br><br><br>
+
+  &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspTheaters<br><br>
+  <%if (dataT.length > 0) { %>
+      <table>
+              <tr>
+                <th>Name</th> 
+                <th>Manager</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Capacity</th>
+              </tr>
+            <% for (var i = 0; i < dataT.length; i++) { %>
+            <tr>
+              <td><%= dataT[i].thName %></td>
+              <td><%= dataT[i].thManagerUsername %></td>
+              <td><%= dataT[i].thCity %></td>
+              <td><%= dataT[i].thState %></td>
+              <td><%= dataT[i].thCapacity %></td>
+            </tr>
+            <% } %>
+          </table>
+  <% } %>
+</form>
+
+
+<form name="back" action="/adminManageCompany/getInfo" method="get">
+  <button type="submit" class="btn btn-primary" value="Back">Back</button>
+</form>
+
+
+<%if (errors.length > 0) { %>
+  <ul>
+    <% for (var i = 0; i < errors.length; i++) { %>
+      <li>
+        <%=errors[i].msg%>
+      </li>
+    <% } %>
+  </ul>
+<% } %>
+
+</body>
+</html>
