@@ -10,31 +10,35 @@
 
 <form name="mc_register" method="POST">
   First Name
-  <input type="text" name="fName">
+  <input type="text" name="fName" value="<%=fname%>">
   Last Name
-  <input type="text" name="lName"><br>
+  <input type="text" name="lName" value="<%=lname%>"><br>
   <br>
   Username
-  <input type="text" name="username">
+  <input type="text" name="username" value="<%=username%>">
   Company
   <select name="company">
-    <% for (var i = 0; i < company.length; i++) { %>
-            <option value="<%= company[i]['Name'] %>"><%=company[i]['Name'] %></option>
+    <option value="<%=company%>"><%=company%></option>
+    <% for (var i = 0; i < companyList.length; i++) { %>
+        <% if (companyList[i]['Name'] != company) { %>
+            <option value="<%= companyList[i]['Name'] %>"><%=companyList[i]['Name'] %></option>
+        <% } %>
     <% } %>
     </select><br>
   <br>
   Password
-  <input type="password" name="password">
+  <input type="password" name="password" value="<%=password%>">
   Confirm Password
-  <input type="password" name="cpassword"><br>
+  <input type="password" name="cpassword" value="<%=cpassword%>"><br>
   <br>
   Street Address
-  <textarea name="street" cols="50" rows="1"></textarea><br>
+  <textarea name="street" cols="50" rows="1" value="<%=street%>"><%=street%></textarea><br>
   <br>
   City
-  <input type="text" name="city">
+  <input type="text" name="city" value="<%=city%>">
   State
   <select name="state" id="state">
+    <option value="<%=state%>"><%=state%></option>
     <option value="AL">AL</option>
     <option value="AK">AK</option>
     <option value="AZ">AZ</option>
@@ -88,7 +92,7 @@
     <option value="WY">WY</option>
 </select>
   Zipcode
-  <input type="text" name="zipcode"><br>
+  <input type="text" name="zipcode" value="<%=zipcode%>"><br>
   <br>
   Credit Card#
   <br>
