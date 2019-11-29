@@ -1,0 +1,17 @@
+<h6>
+    <% if (sess && sess.username) { %>
+      <p>Hello, <%= sess.username%>, your status is <%= sess.status%>.</p>
+      <p>Identity: <%= sess.identities %> </p>
+      <form action="/logout" method="get">
+        <button type="submit" class="btn btn-dark btn-sm">logout</button>
+      </form>
+    <% } else { %>
+        <form action="/login" method="get">
+          <button type="submit" class="btn btn-secondary btn-sm">click to login</button>
+        </form>
+            <br><br>
+            <form action="/nevigate" method="get">
+                <button type="submit" class="btn btn-secondary btn-sm">click to register</button>
+            </form>
+    <% } %>
+  </h6>

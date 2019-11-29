@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+
+<h1><%= title %></h1>
+
+<%- include('common_template') -%>
+
+<form name="theater_overview" method="get" action="/theaterDetail/getInfo">
+  <!--
+  Manager name(will be removed with user login):<br>
+  <input type="text" name="managerName"><br>
+  -->
+  Movie name(Include):<br>
+  <input type="text" name="movieName"><br>
+  Movie Duration start:<br>
+  <input type="text" name="durationStart">
+  -
+  <input type="text" name="durationEnd" ><br>
+  Movie Release Date:<br>
+  <input type="date" name="releaseStart">
+  -
+  <input type="date" name="releaseEnd"><br>
+  Movie Play Date:<br>
+  <input type="date" name="playDateStart">
+  -
+  <input type="date" name="playDateEnd"><br>
+  <input type="checkbox" name="includeNotPlayed">Only Include Not Played Movies<br>
+  <button type="submit" class="btn btn-primary" value="Filter">Filter</button>
+</form>
+
+<%if (data.length > 0) { %>
+  <table border="1">
+
+    <tr>
+      <th>Name</th>
+      <th>Duration</th>
+      <th>ReleaseDate</th>
+      <th>PlayDate</th>
+    </tr>
+    <% for (var i = 0; i < data.length; i++) { %>
+      <tr>
+        <td><%= data[i].movName %></td>
+        <td><%= data[i].movDuration %></td>
+        <td><%= data[i].movReleaseDate %></td>
+        <td><%= data[i].movPlayDate %></td>
+      </tr>
+    <% } %>
+  </table>
+<% } %>
+<br><br>
+<%if (sess.isCustomer) { %>
+  <form action="/managerCustomer" method="get">
+    <button type="submit" class="btn btn-primary" value="Back">Back</button>
+  </form>
+<%} else { %>
+  <form action="/managerOnly" method="get">
+    <button type="submit" class="btn btn-primary" value="Back">Back</button>
+  </form>
+<%}%>
+<%if (errors.length > 0) { %>
+  <ul>
+    <% for (var i = 0; i < errors.length; i++) { %>
+    <li>
+      <%=errors[i].msg%>
+    </li>
+    <% } %>
+  </ul>
+<% } %>
+
+</body>
+</html>

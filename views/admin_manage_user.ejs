@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+
+<h1><%= title %></h1>
+
+<form name="user_list" method="get" action="/adminManageUser">
+    Username
+    <input id="userName" type="text" name="userName">
+    <br><br>Status
+    <select name="status" id="status">
+        <option value="ALL">-ALL-</option>
+        <option value="Approved">Approved</option>
+        <option value="Declined">Declined</option>
+        <option value="Pending">Pending</option>
+    </select>
+
+
+    <br><br>
+    <button type="submit" class="btn btn-primary" value="Filter">Filter</button>
+    
+</form>
+<form name="approve" method="post" action="/adminManageUser">
+    <button type="submit" class="btn btn-primary" value="Approve" name="choose">Approve</button>
+    <button type="submit" class="btn btn-primary" value="Declined" name="choose">Decline</button>
+
+<br>
+    <br><br>
+<%if (data.length > 0) { %>
+    <table>
+
+            <tr>
+              <th><a href="/adminManageUser/sort?sortBy=userName">Username</a></th> 
+              <th><a href="/adminManageUser/sort?sortBy=creditCardCount">Credit Card Count</a></th>
+              <th><a href="/adminManageUser/sort?sortBy=userType">User Type</a></th>
+              <th><a href="/adminManageUser/sort?sortBy=status">Status</a></th>
+            </tr>
+          <% for (var i = 0; i < data.length; i++) { %>
+          <tr>
+            <td><input type="radio" name="target_username" value = "<%= data[i].username %>"><%= data[i].username %></td>
+            <td><%= data[i].creditCardCount %></td>
+            <td><%= data[i].userType %></td>
+            <td><%= data[i].STATUS %></td>
+          </tr>
+          <% } %>
+        </table>
+<% } %>
+</form>
+<br>
+<br><br>
+<%if (sess.isCustomer) { %>
+    <form action="/adminCustomer" method="get">
+        <button type="submit" class="btn btn-primary" value="Back">Back</button>
+    </form>
+<%} else { %>
+    <form action="/adminOnly" method="get">
+        <button type="submit" class="btn btn-primary" value="Back">Back</button>
+    </form>
+<%}%>
+
+<%if (errors.length > 0) { %>
+  <ul>
+    <% for (var i = 0; i < errors.length; i++) { %>
+      <li>
+        <%=errors[i].msg%>
+      </li>
+    <% } %>
+  </ul>
+<% } %>
+
+</body>
+</html>
