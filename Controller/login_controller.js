@@ -5,7 +5,7 @@ let session = require("express-session");
 
 exports.login_get = function(req, res, next) {
     //var sql = "get login info"
-    res.render('login', {title: "Please Login into your account", errors: []});
+    res.render('login', {title: "Atlanta Movie Login", errors: []});
 };
 exports.nevigate_get = function(req, res, next) {
     //var sql = "get login info"
@@ -14,7 +14,7 @@ exports.nevigate_get = function(req, res, next) {
 exports.login_post = [
     body('username', 'username must not be empty.').isLength({ min: 1 }).trim(),
     body('password', 'password must not be empty.').isLength({ min: 1 }).trim(),
-    
+
     // Sanitize fields (using wildcard).
     sanitizeQuery('*').escape(),
 
@@ -96,6 +96,3 @@ exports.logout_page = function(req, res, next) {
     req.session.identities = null;
     res.render('logout_view');
 };
-
-
-
