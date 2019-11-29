@@ -33,7 +33,7 @@ exports.user_detail_update = [
 
         if (!errors.isEmpty()) {
             res.render('admin_manage_user', {title: 'Manage User',
-                data: [], errors: errors.array()});
+                data: [], url: req.session.funcUrl, errors: errors.array()});
         }
         else if (isEmptyObj(req.query))    {
 
@@ -42,7 +42,7 @@ exports.user_detail_update = [
                     errors: [{msg: "You are not an administrator, you have no right to view the page!"}], sess: req.session});
             } else {
                 res.render('admin_manage_user', {title: 'Manage User',
-                data: [], errors: []});
+                data: [], url: req.session.funcUrl, errors: []});
             }
             
         } else {
