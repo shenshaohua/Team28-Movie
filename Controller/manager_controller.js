@@ -19,13 +19,13 @@ exports.theater_detail_get = function (req, res, next) {
 exports.theater_detail_update = [
     // Validate fields.
     //query('managerName', 'managerName must not be empty.').isLength({ min: 1 }).trim(),
-    query('movieName', 'movieName must not be empty.').isLength({ min: 1 }).trim(),
-    query('durationStart', 'durationStart must not be empty.').isLength({ min: 1 }).trim(),
-    query('durationEnd', 'durationEnd must not be empty.').isLength({ min: 1 }).trim(),
-    query('playDateStart', 'minMoviePlayDate must not be empty.').isLength({ min: 1 }).trim(),
-    query('playDateEnd', 'maxMoviePlayDate must not be empty.').isLength({ min: 1 }).trim(),
-    query('releaseStart', 'minReleaseDate must not be empty.').isLength({ min: 1 }).trim(),
-    query('releaseEnd', 'maxReleaseDate must not be empty.').isLength({ min: 1 }).trim(),
+    //query('movieName', 'movieName must not be empty.').isLength({ min: 1 }).trim(),
+    //query('durationStart', 'durationStart must not be empty.').isLength({ min: 1 }).trim(),
+    //query('durationEnd', 'durationEnd must not be empty.').isLength({ min: 1 }).trim(),
+    //query('playDateStart', 'minMoviePlayDate must not be empty.').isLength({ min: 1 }).trim(),
+    //query('playDateEnd', 'maxMoviePlayDate must not be empty.').isLength({ min: 1 }).trim(),
+    //query('releaseStart', 'minReleaseDate must not be empty.').isLength({ min: 1 }).trim(),
+    //query('releaseEnd', 'maxReleaseDate must not be empty.').isLength({ min: 1 }).trim(),
 
     // Sanitize fields (using wildcard).
     sanitizeQuery('*').escape(),
@@ -52,16 +52,20 @@ exports.theater_detail_update = [
         } else {
             //var managerName = req.query.managerName;
             var managerName = req.session.username;
-            var movieName = req.query.movieName;
-            var durationStartINT = parseInt(req.query.durationStart);
-            var durationEndINT = parseInt(req.query.durationEnd);
-            var minMoviePlayDate = dateFormat(req.query.playDateStart, "yyyy-mm-dd");
-            var maxMoviePlayDate = dateFormat(req.query.playDateEnd, "yyyy-mm-dd");
-            var minReleaseDate = dateFormat(req.query.releaseStart, "yyyy-mm-dd");
-            var maxReleaseDate = dateFormat(req.query.releaseEnd, "yyyy-mm-dd");
-            //console.log(maxReleaseDate);
+            var movieName = req.query.movieName ? req.query.movieName : "";
+            var durationStartINT = req.query.durationStart ? parseInt(req.query.durationStart) : null;
+            var durationEndINT = req.query.durationEnd ? parseInt(req.query.durationEnd) : null;
+            console.log(req.query.playDateStart === "");
+            console.log(req.query.playDateEnd === "");
+            var minMoviePlayDate = (req.query.playDateStart !== "") ? dateFormat(req.query.playDateStart, "yyyy-mm-dd") : null;
+            var maxMoviePlayDate = (req.query.playDateEnd !== "") ? dateFormat(req.query.playDateEnd, "yyyy-mm-dd") : null;
+            var minReleaseDate = (req.query.releaseStart !== "") ? dateFormat(req.query.releaseStart, "yyyy-mm-dd") : null;
+            var maxReleaseDate = (req.query.releaseEnd !== "") ? dateFormat(req.query.releaseEnd, "yyyy-mm-dd") : null;
+            console.log(minMoviePlayDate);
+            console.log(minReleaseDate);
             var includeNotPlayed = false;
             if (req.query.includeNotPlayed && req.query.includeNotPlayed === 'on') includeNotPlayed = true;
+            //console.log(includeNotPlayed);
             // call procedure first, create the table that has information
             var testSql = "call manager_filter_th(?, ?, ?, ?, ?, ?, ?, ?, ?)";
             //db.query(testSql, ['manager1', 'Spaceballs', 0, 500, '1800-01-01', '2020-01-01', '1990-01-01', '2020-01-01', false],
@@ -82,9 +86,10 @@ exports.theater_detail_update = [
                 updatedResults = [];
                 for (var i = 0; i < results.length; i++) {
                     updatedResults[i] = results[i];
-                    updatedResults[i].ReleaseDate = dateFormat(updatedResults[i].ReleaseDate, "yyyy-mm-dd");
-                    updatedResults[i].Date = dateFormat(updatedResults[i].Date, "yyyy-mm-dd");
+                    //updatedResults[i].ReleaseDate = dateFormat(updatedResults[i].ReleaseDate, "yyyy-mm-dd");
+                    //updatedResults[i].Date = dateFormat(updatedResults[i].Date, "yyyy-mm-dd");
                 }
+                console.log(results);
                 res.render('manager_theater_overview', {title: 'Here comes your result!',
                     data: updatedResults, errors: [], sess: req.session});
             });
@@ -104,7 +109,9 @@ exports.schedule_movie_get = function (req, res, next) {
         if (error) {
             return console.error(error.message);
         }
+        console.log("successfully retrieved the movie list!");
         movies = results;
+        console.log(movies);
         res.render('manager_schedule_movie', {title: "Dear manager, you're welcome to schedule some movies!",
             movies: movies, errors: [], sess: req.session});
     });
@@ -140,6 +147,7 @@ exports.schedule_movie_post = [
                 if (error) {
                     return console.error(error.message);
                 }
+                console.log("successfully retrieved the movie list!");
                 movies = results;
                 var errorsToDisplay = (req.body.playDate < req.body.releaseDate) ? [{msg: 'play date must be after release date'}] : errors.array();
                 res.render('manager_schedule_movie', {title: "Wrong info typed!",
@@ -153,14 +161,17 @@ exports.schedule_movie_post = [
             var playDate = req.body.playDate;
 
             var testCapacitySql = "Select Capacity From theater Where theater.ManagerUsername = '" + managerName + "';";
+            console.log(testCapacitySql);
             db.query(testCapacitySql, [], (error, results, fields) => {
                 var capacity = results[0]['Capacity']; // get the capacity
                 //var getCurCapacitySql = "Select Count(*) From theater Where theater.ManagerUsername = '" + managerName + "'" + " and " + "theater."     ";";
                 var getCurCapacitySql = 'SELECT COUNT(*) AS Capacity \n' +
                     '\tFROM theater AS t, movieplay AS m\n' +
                     '    WHERE t.ManagerUsername = \'' + managerName + '\' AND t.TheaterName = m.TheaterName AND m.DATE = \' '+ playDate + '\';';
+                console.log(getCurCapacitySql);
                 db.query(getCurCapacitySql, [], (error, results, fields) => {
                     var curCapacity = results[0]['Capacity'];
+                    console.log(curCapacity);
                     if (curCapacity >= capacity) {
                         var sql = "Select Name from movie";
                         var movies = [];
@@ -168,6 +179,7 @@ exports.schedule_movie_post = [
                             if (error) {
                                 return console.error(error.message);
                             }
+                            console.log("successfully retrieved the movie list!");
                             movies = results;
                             var errorsToDisplay = (req.body.playDate < req.body.releaseDate) ? [{msg: 'play date must be after release date'}] : errors.array();
                             res.render('manager_schedule_movie', {title: "Wrong info typed!",
@@ -177,6 +189,8 @@ exports.schedule_movie_post = [
                     }
                 });
             });
+
+            console.log(req.body);
             var sql = "call manager_schedule_mov(?, ?, ?, ?)";
             db.query(sql, [managerName, movieName, releaseDate, playDate], (error, results, fields) => {
                 if (error) {

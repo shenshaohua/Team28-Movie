@@ -5,7 +5,7 @@ let session = require("express-session");
 
 exports.login_get = function(req, res, next) {
     //var sql = "get login info"
-    res.render('login', {title: "Atlanta Movie Login", errors: []});
+    res.render('login', {title: "Please Login into your account", errors: []});
 };
 exports.nevigate_get = function(req, res, next) {
     //var sql = "get login info"
@@ -14,7 +14,7 @@ exports.nevigate_get = function(req, res, next) {
 exports.login_post = [
     body('username', 'username must not be empty.').isLength({ min: 1 }).trim(),
     body('password', 'password must not be empty.').isLength({ min: 1 }).trim(),
-
+    
     // Sanitize fields (using wildcard).
     sanitizeQuery('*').escape(),
 
@@ -55,6 +55,11 @@ exports.login_post = [
                             req.session.isAdmin = results[0]['isAdmin'];
                             req.session.isManager = results[0]['isManager'];
                             var identities = "";
+                            if (req.session.isCustomer && req.session.isCustomer === 1) identities += "Customer ";
+                            if (req.session.isAdmin && req.session.isCustomer === 1) identities += "Admin ";
+                            if (req.session.isManager && req.session.isCustomer === 1) identities += "Manager";
+                            if (identities === "") identities = "User";
+                            req.session.identities = identities;
                             if (req.session.isAdmin && req.session.isAdmin === 1) {
                                 if(req.session.isCustomer && req.session.isCustomer === 1) {
                                     res.redirect('/adminCustomer');
@@ -96,3 +101,6 @@ exports.logout_page = function(req, res, next) {
     req.session.identities = null;
     res.render('logout_view');
 };
+
+
+
