@@ -194,9 +194,21 @@ exports.schedule_movie_post = [
             var sql = "call manager_schedule_mov(?, ?, ?, ?)";
             db.query(sql, [managerName, movieName, releaseDate, playDate], (error, results, fields) => {
                 if (error) {
-                    return console.error(error.message);
+                    var sql = "Select Name from movie";
+                    var movies = [];
+                    db.query(sql, [], (error, results, fields) => {
+                        if (error) {
+                            return console.error(error.message);
+                        }
+                        console.log("successfully retrieved the movie list!");
+                        movies = results;
+                        console.log(movies);
+                        res.render('manager_schedule_movie', {title: "Dear manager, you're welcome to schedule some movies!",
+                            movies: movies, errors: [{msg: "Please enter the correct combination for Movie and ReleaseDate"}], sess: req.session});
+                    });
+                } else {
+                    res.redirect('/managerScheduleMoviePlay');
                 }
-                res.redirect('/managerScheduleMoviePlay');
             })
         }
     }
