@@ -12,9 +12,13 @@
   <input type="text" name="username"><br>
   Password:<br>
   <input type="password" name="password"><br>
+  <br><br>
   <button type="submit" class="btn btn-secondary" value="login">Login</button>
 </form>
-
+<br><br>
+<form action="/" method="get">
+  <button type="submit" class="btn btn-primary btn-lg">Back</button>
+</form>
 <%if (errors.length > 0) { %>
   <ul>
     <% for (var i = 0; i < errors.length; i++) { %>

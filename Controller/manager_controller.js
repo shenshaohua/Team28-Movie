@@ -62,7 +62,6 @@ exports.theater_detail_update = [
             //console.log(maxReleaseDate);
             var includeNotPlayed = false;
             if (req.query.includeNotPlayed && req.query.includeNotPlayed === 'on') includeNotPlayed = true;
-            console.log(includeNotPlayed);
             // call procedure first, create the table that has information
             var testSql = "call manager_filter_th(?, ?, ?, ?, ?, ?, ?, ?, ?)";
             //db.query(testSql, ['manager1', 'Spaceballs', 0, 500, '1800-01-01', '2020-01-01', '1990-01-01', '2020-01-01', false],
@@ -86,7 +85,6 @@ exports.theater_detail_update = [
                     updatedResults[i].ReleaseDate = dateFormat(updatedResults[i].ReleaseDate, "yyyy-mm-dd");
                     updatedResults[i].Date = dateFormat(updatedResults[i].Date, "yyyy-mm-dd");
                 }
-                console.log(results);
                 res.render('manager_theater_overview', {title: 'Here comes your result!',
                     data: updatedResults, errors: [], sess: req.session});
             });
@@ -106,9 +104,7 @@ exports.schedule_movie_get = function (req, res, next) {
         if (error) {
             return console.error(error.message);
         }
-        console.log("successfully retrieved the movie list!");
         movies = results;
-        console.log(movies);
         res.render('manager_schedule_movie', {title: "Dear manager, you're welcome to schedule some movies!",
             movies: movies, errors: [], sess: req.session});
     });
@@ -144,7 +140,6 @@ exports.schedule_movie_post = [
                 if (error) {
                     return console.error(error.message);
                 }
-                console.log("successfully retrieved the movie list!");
                 movies = results;
                 var errorsToDisplay = (req.body.playDate < req.body.releaseDate) ? [{msg: 'play date must be after release date'}] : errors.array();
                 res.render('manager_schedule_movie', {title: "Wrong info typed!",
@@ -158,17 +153,14 @@ exports.schedule_movie_post = [
             var playDate = req.body.playDate;
 
             var testCapacitySql = "Select Capacity From theater Where theater.ManagerUsername = '" + managerName + "';";
-            console.log(testCapacitySql);
             db.query(testCapacitySql, [], (error, results, fields) => {
                 var capacity = results[0]['Capacity']; // get the capacity
                 //var getCurCapacitySql = "Select Count(*) From theater Where theater.ManagerUsername = '" + managerName + "'" + " and " + "theater."     ";";
                 var getCurCapacitySql = 'SELECT COUNT(*) AS Capacity \n' +
                     '\tFROM theater AS t, movieplay AS m\n' +
                     '    WHERE t.ManagerUsername = \'' + managerName + '\' AND t.TheaterName = m.TheaterName AND m.DATE = \' '+ playDate + '\';';
-                console.log(getCurCapacitySql);
                 db.query(getCurCapacitySql, [], (error, results, fields) => {
                     var curCapacity = results[0]['Capacity'];
-                    console.log(curCapacity);
                     if (curCapacity >= capacity) {
                         var sql = "Select Name from movie";
                         var movies = [];
@@ -176,7 +168,6 @@ exports.schedule_movie_post = [
                             if (error) {
                                 return console.error(error.message);
                             }
-                            console.log("successfully retrieved the movie list!");
                             movies = results;
                             var errorsToDisplay = (req.body.playDate < req.body.releaseDate) ? [{msg: 'play date must be after release date'}] : errors.array();
                             res.render('manager_schedule_movie', {title: "Wrong info typed!",
@@ -186,8 +177,6 @@ exports.schedule_movie_post = [
                     }
                 });
             });
-
-            console.log(req.body);
             var sql = "call manager_schedule_mov(?, ?, ?, ?)";
             db.query(sql, [managerName, movieName, releaseDate, playDate], (error, results, fields) => {
                 if (error) {

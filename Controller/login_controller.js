@@ -7,7 +7,10 @@ exports.login_get = function(req, res, next) {
     //var sql = "get login info"
     res.render('login', {title: "Please Login into your account", errors: []});
 };
-
+exports.nevigate_get = function(req, res, next) {
+    //var sql = "get login info"
+    res.render('nevigate', {title: "Register Nevigation", errors: []});
+}
 exports.login_post = [
     body('username', 'username must not be empty.').isLength({ min: 1 }).trim(),
     body('password', 'password must not be empty.').isLength({ min: 1 }).trim(),

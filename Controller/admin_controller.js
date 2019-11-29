@@ -32,17 +32,17 @@ exports.user_detail_update = [
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
-            res.render('admin_manage_user', {title: 'Manage User',
-                data: [], errors: errors.array()});
+            res.render('admin_manage_user', {title: 'Manage User', sess: req.session,
+                data: [], url: req.session.funcUrl, errors: errors.array()});
         }
         else if (isEmptyObj(req.query))    {
 
             if (req.session.isAdmin === null || req.session.isAdmin != 1) {
-                res.render('index', { title: 'Hello',
+                res.render('index', { title: 'Hello',sess: req.session,
                     errors: [{msg: "You are not an administrator, you have no right to view the page!"}], sess: req.session});
             } else {
-                res.render('admin_manage_user', {title: 'Manage User',
-                data: [], errors: []});
+                res.render('admin_manage_user', {title: 'Manage User',sess: req.session,
+                data: [], url: req.session.funcUrl, errors: []});
             }
             
         } else {
@@ -75,7 +75,7 @@ exports.user_detail_update = [
                 }
                 //console.log(results);
                 res.render('admin_manage_user', {title: 'Manage User', 
-                    data: updatedResults, errors: []});
+                    data: updatedResults,sess: req.session, url: req.session.funcUrl, errors: []});
             });
 
 
@@ -123,7 +123,7 @@ exports.user_detail_sort = function(req, res, next) {
                 }
                 //console.log(results);
                 res.render('admin_manage_user', {title: 'Manage User',
-                    data: updatedResults, errors: []});
+                    data: updatedResults, sess: req.session,url: req.session.funcUrl, errors: []});
             });
 
 }
@@ -138,7 +138,7 @@ exports.user_detail_changestatus = [
 
         // if have logic errors
         if (!errors.isEmpty()) {
-            res.render('admin_manage_user', {title: "Wrong info typed!", data:[], errors:[]});
+            res.render('admin_manage_user', {title: "Wrong info typed!",sess: req.session, data:[], errors:[]});
         } else {
             var sql1 = "call admin_approve_user(?)";
             var sql2 = "call admin_decline_user(?)";            
@@ -154,7 +154,7 @@ exports.user_detail_changestatus = [
                 const target_status = await dbQuery(sql3);
                 console.log(target_status[0]['status']);
                 if(target_status[0]['status'] === 'Approved') {
-                    res.render('admin_manage_user', {title: "You cannot decline an approved user.", data:[], errors:[]});
+                    res.render('admin_manage_user', {title: "You cannot decline an approved user.", sess: req.session,data:[], url: req.session.funcUrl, errors:[]});
                 } else {
                     sql = sql2;
                 }
@@ -179,14 +179,24 @@ exports.user_detail_changestatus = [
 //screen 15
 exports.create_theater_get = async function (req, res, next) {
     if (req.session.isAdmin === null || req.session.isAdmin != 1) {
-        res.render('index', { title: 'Hello',
+        res.render('index', { title: 'Hello',sess: req.session,
             errors: [{msg: "You are not an administrator, you have no right to view the page!"}], sess: req.session});
     } else {
-        var sql1 = "Select Name from company";
-        var sql2 = "Select UserName from manager where UserName not in (select managerUsername from theater)";
-        const companys = await dbQuery(sql1);
-        const managerNames = await dbQuery(sql2);
-        res.render('admin_create_theater', {title: "Create Theater", companys: companys, managerNames: managerNames, errors: []});
+        //set the first value in the dropdown list
+        var target_companyName = req.query.target_companyName;
+        // console.log('target_companyName is');
+        // console.log(target_companyName);
+        if (typeof(target_companyName) == "undefined") {
+            target_companyName = "4400 Theater Company";
+        }
+        console.log(target_companyName);
+        //success!
+
+        var sql1 = "Select Name from company order by Name = ? desc";
+        var sql2 = "SELECT UserName, Works_In FROM manager WHERE UserName NOT IN (SELECT ManagerUsername FROM theater) AND Works_In = ? ";
+        const companys = await dbQuery(sql1, [target_companyName]);
+        const managerNames = await dbQuery(sql2, [target_companyName]);
+        res.render('admin_create_theater', {title: "Create Theater",sess: req.session, companys: companys, managerNames: managerNames, errors: []});
     }
     
 }
@@ -207,7 +217,7 @@ exports.create_theater_post = [
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
-            res.render('admin_create_theater', {title: 'Create Theater',
+            res.render('admin_create_theater', {title: 'Create Theater',sess: req.session,
                 errors: errors.array()});
         } else {
             var theaterName = req.body.theaterName;
@@ -238,10 +248,10 @@ exports.create_theater_post = [
 //screen 17
 exports.create_movie_get = function (req, res, next) {
     if (req.session.isAdmin === null || req.session.isAdmin != 1) {
-        res.render('index', { title: 'Hello',
+        res.render('index', { title: 'Hello',sess: req.session,
             errors: [{msg: "You are not an administrator, you have no right to view the page!"}], sess: req.session});
     }  else {
-        res.render('admin_create_movie', {title: 'Create Movie', errors: []});
+        res.render('admin_create_movie', {title: 'Create Movie',sess: req.session, url: req.session.funcUrl, errors: []});
 
     }
     
@@ -262,7 +272,7 @@ exports.create_movie_post = [
 
         // if have logic errors
         if (!errors.isEmpty()) {
-            res.render('admin_create_movie', {title: "Wrong info typed!", errors: errors.array()});
+            res.render('admin_create_movie', {title: "Wrong info typed!",sess: req.session, url: req.session.funcUrl, errors: errors.array()});
         } else {
             var movieName = req.body.movieName;
             var duration = req.body.duration;
@@ -272,13 +282,250 @@ exports.create_movie_post = [
             var sql = "call admin_create_mov(?,?,?)";
             db.query(sql, [movieName, duration, releaseDate], (error, results, fields) => {
                 if (error) {
-                    return console.error(error.message);
+                    res.render('error', {message: "The combination of “Name” and “Release Date” is unique for all movies", error: error});
+                } else {
+                    res.redirect('/adminCreateMovie');
                 }
-                res.redirect('/adminCreateMovie');
+                
             })
         }
     }
 ];
+
+// screen 14
+let companys1 = [];
+exports.manage_company_get = [
+    //(ignore Validate fields.in this case)
+    // Sanitize fields (using wildcard).
+    sanitizeQuery('*').escape(),
+(req, res, next) => {
+        // Extract the validation errors from a request.
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            res.render('admin_filter_company', {title: 'Manage Company',
+                data: [], sess: req.session,url: req.session.funcUrl, errors: errors.array()});
+        }
+        else if (isEmptyObj(req.query)) {
+            
+            if (req.session.isAdmin === null || req.session.isAdmin != 1) {
+                res.render('index', { title: 'Hello',sess: req.session,
+                    errors: [{msg: "You are not an administrator, you have no right to view the page!"}], sess: req.session});
+            } 
+
+
+            var sql = "Select Name from company";
+
+            db.query(sql, [], (error, results1, fields) => {
+                if (error) {
+                    return console.error(error.message);
+                }
+                console.log("successfully retrieved the company list!");
+                //console.log(results);
+                companys1 = companys1.concat(results1);
+                //console.log(companys1);
+            });
+
+
+            var testSql = "call admin_filter_company('ALL', 1, 100, 1, 100, 1, 100, '', '')";
+            //
+            
+            db.query(testSql, [companyName, mincityCovered, maxcityCovered, mintheaters, maxtheaters, minemployees, maxemployees, sortBy, sortDirection], (error, results, fields) => {
+                if (error) {
+                    return console.error(error.message);
+                }
+            });
+
+            // poll from newly created table and send it to our view
+            var pollSql = "Select * From AdFilterCom";
+            db.query(pollSql, [], (error, results2, fields) => {
+                if (error) {
+                    return console.error(error.message);
+                }
+
+            //console.log(results2);
+            //success!
+
+            res.render('admin_filter_company', {title: 'Manage Company',sess: req.session, companys: companys1, data: results2, url: req.session.funcUrl, errors: []})
+            });
+
+
+
+        } else {
+
+            var companyName = req.query.companyName;
+
+            var mincityCovered = parseInt(req.query.mincityCovered);
+            if (isNaN(mincityCovered)) {
+                mincityCovered = null;
+            }
+            var maxcityCovered = parseInt(req.query.maxcityCovered);
+            if (isNaN(maxcityCovered)) {
+                maxcityCovered = null;
+            }
+            var mintheaters = parseInt(req.query.mintheaters);
+            if (isNaN(mintheaters)) {
+                mintheaters = null;
+            }
+            var maxtheaters = parseInt(req.query.maxtheaters);
+            if (isNaN(maxtheaters)) {
+                maxtheaters = null;
+            }
+            var minemployees = parseInt(req.query.minemployees);
+            if (isNaN(minemployees)) {
+                minemployees = null;
+            }
+            var maxemployees = parseInt(req.query.maxemployees);
+            if (isNaN(maxemployees)) {
+                maxemployees = null;
+            }
+
+
+            var sortBy = '';
+            var sortDirection = '';
+
+            // for sort use
+            req.session.screen14Combination = [companyName, mincityCovered, maxcityCovered, mintheaters, maxtheaters, minemployees, maxemployees, sortBy, sortDirection];
+            //console.log(req.session.screen14Combination);
+
+            // call procedure first, create the table that has information
+            var testSql = "call admin_filter_company(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+            db.query(testSql, [companyName, mincityCovered, maxcityCovered, mintheaters, maxtheaters, minemployees, maxemployees, sortBy, sortDirection], (error, results, fields) => {
+                if (error) {
+                    return console.error(error.message);
+                }
+            });
+
+            // poll from newly created table and send it to our view
+            var pollSql = "Select * From AdFilterCom";
+            db.query(pollSql, [], (error, results, fields) => {
+                if (error) {
+                    return console.error(error.message);
+                }
+            //console.log(results);
+
+            res.render('admin_filter_company', {title: 'Manage Company', companys: companys1,
+                data: results, sess: req.session,url: req.session.funcUrl, errors: []});
+            });
+        }
+    }
+]
+
+let directC =  1;
+exports.company_detail_sort = function(req, res, next) {
+
+    var sortBy = req.query.sortBy;
+    var sortDirection;
+    directC *= -1;
+            
+    if(!sortBy) {
+        sortBy = '';
+    }
+    console.log(directC);
+    if(directC == -1) {
+        sortDirection = 'DESC';
+    } else {
+        sortDirection = 'ASC';
+    }
+    console.log(sortDirection);
+
+    var combination = req.session.screen14Combination;
+    console.log(combination);
+    if (typeof(combination) == "undefined") {
+        combination = ['ALL', 1, 100, 1, 100, 1, 100, '', ''];
+        ;
+    } 
+    combination[7] = sortBy;
+    combination[8] = sortDirection;
+
+    var sql = "Select Name from company";
+
+    db.query(sql, [], (error, results1, fields) => {
+        if (error) {
+            return console.error(error.message);
+        }
+        console.log("successfully retrieved the company list!");
+        //console.log(results);
+       // console.log(results.length);
+        companys1 = companys1.concat(results1);
+        //console.log(companys1);
+    });
+
+
+    // call procedure first, create the table that has information
+    var testSql = "call admin_filter_company(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    db.query(testSql, combination, (error, results, fields) => {
+        if (error) {
+            return console.error(error.message);
+        }
+    });
+
+    // poll from newly created table and send it to our view
+    var pollSql = "Select * From AdFilterCom";
+    db.query(pollSql, [], (error, results, fields) => {
+        if (error) {
+            return console.error(error.message);
+        }
+
+    console.log(results);
+    res.render('admin_filter_company', {title: 'Manage Company', companys: companys1,
+        data: results, sess: req.session,url: req.session.funcUrl, errors: []});
+    });
+
+}
+
+
+//screen 16
+exports.comDetail_get =  async (req, res, next) => {
+
+        // Extract the validation errors from a request.
+        const errors = validationResult(req);
+
+        // if have logic errors
+        if (!errors.isEmpty()) {
+            res.render('company_detail', {title: "Wrong info typed!", data:[], errors:[]});
+        } else {
+
+            if (req.session.isAdmin === null || req.session.isAdmin != 1) {
+                res.render('index', { title: 'Hello',sess: req.session,
+                    errors: [{msg: "You are not an administrator, you have no right to view the page!"}], sess: req.session});
+            }
+ 
+
+            let target_companyName = req.query.target_companyName;
+            // console.log(target_companyName);
+
+            if (typeof(target_companyName) == "undefined") {
+                target_companyName = "4400 Theater Company";
+            }
+            console.log(target_companyName);
+
+            const sql1 = "call admin_view_comDetail_emp(?)";
+            db.query(sql1, [target_companyName], (error, results, fields) => {
+                if (error) {
+                    return console.error(error.message);
+                }
+            });
+            const pollSql1 = "SELECT * FROM team28.adcomdetailemp";
+            let comDetailEmp = await dbQuery(pollSql1, [target_companyName]);
+
+            const sql2 = "call admin_view_comDetail_th(?)";
+            db.query(sql2, [target_companyName], (error, results, fields) => {
+                if (error) {
+                    return console.error(error.message);
+                }
+            });
+            const pollSql2 = "SELECT * FROM team28.adcomdetailth;";
+            let comDetailTh = await dbQuery(pollSql2, [target_companyName]);
+            
+            // console.log(comDetailEmp);
+            // console.log(comDetailTh);
+            res.render('company_detail', {title: "Company Detail", sess: req.session,cop: target_companyName, dataE: comDetailEmp, dataT: comDetailTh, errors:[]});
+
+            
+        }
+    }
 
 // Some helper functions:
 

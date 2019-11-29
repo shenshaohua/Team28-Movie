@@ -1,28 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= title %></title>
-  <link rel='stylesheet' href='/stylesheets/style.css' />
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
 </head>
 <body>
 
 <h1><%= title %></h1>
 
-<form name="create_theater" method="post">
-    Name
-    <input type="text" name="theaterName"><br><br>
+<form name="mc_register" method="POST">
+    First Name
+    <input type="text" name="fName" value="<%=fname%>">
+    Last Name
+    <input type="text" name="lName" value="<%=lname%>"><br>
+    <br>
+    Username
+    <input type="text" name="username" value="<%=username%>">
     Company
-    <select name="companyName">
-    <% for (var i = 0; i < companys.length; i++) { %>
-        <option value="<%= companys[i]['Name'] %>"><%=companys[i]['Name'] %></option>
-    <% } %>
-    </select><br><br>
+    <select name="company">
+        <option value="<%=company%>"><%=company%></option>
+        <% for (var i = 0; i < companyList.length; i++) { %>
+            <% if (companyList[i]['Name'] != company) { %>
+                <option value="<%= companyList[i]['Name'] %>"><%=companyList[i]['Name'] %></option>
+            <% } %>
+        <% } %>
+    </select><br>
+    <br>
+    Password
+    <input type="password" name="password" value="<%=password%>">
+    Confirm Password
+    <input type="password" name="cpassword" value="<%=cpassword%>"><br>
+    <br>
     Street Address
-    <input type="text" name="address"><br><br>
+    <textarea name="street" cols="50" rows="1" value="<%=street%>"><%=street%></textarea><br>
+    <br>
     City
-    <input type="text" name="city"><br><br>
+    <input type="text" name="city" value="<%=city%>">
     State
     <select name="state" id="state">
+        <option value="<%=state%>"><%=state%></option>
         <option value="AL">AL</option>
         <option value="AK">AK</option>
         <option value="AZ">AZ</option>
@@ -74,32 +90,39 @@
         <option value="WV">WV</option>
         <option value="WI">WI</option>
         <option value="WY">WY</option>
-    </select><br><br>
+    </select>
     Zipcode
-    <input type="text" name="zipcode"><br><br>
-    Capacity
-    <input type="text" name="capacity"><br><br>
-    Manager
-    <select name="managerName">
-        <% for (var i = 0; i < managerNames.length; i++) { %>
-            <option value=<%= managerNames[i]['UserName'] %>><%=managerNames[i]['UserName'] %></option>
-        <% } %>
-    </select><br><br>
-  
-  <button type="submit" class="btn btn-primary" value="Create">Create</button>
+    <input type="text" name="zipcode" value="<%=zipcode%>"><br>
+    <br>
+    Credit Card#
+    <br>
+
+    <% for (var i = 0; i < data.length; i++) { %>
+        <%= data[i] %>
+        <button type="submit" class="btn btn-primary" name="select" value="remove<%=i%>" >Remove</button><br/>
+    <% }; %>
+    <!--<p> <%= data %> </p>-->
+    <br>
+    <textarea name="cardNumber" cols="25" rows="1"></textarea>
+    <button type="submit" class="btn btn-primary" value="add" name="select">Add</button>
+    <br>
+    <br>
+    <button type="submit" class="btn btn-primary" value="register" name="select">Register</button><br>
+    <br>
 </form>
-<br><br>
-    <form action="/adminManageCompany/getInfo" method="get">
-        <button type="submit" class="btn btn-primary" value="Back">Back</button>
-    </form>
+
+<form action="/nevigate" method="get">
+    <button type="submit" class="btn btn-primary btn-lg">Back</button>
+</form>
+
 <%if (errors.length > 0) { %>
-  <ul>
-    <% for (var i = 0; i < errors.length; i++) { %>
-      <li>
-        <%=errors[i].msg%>
-      </li>
-    <% } %>
-  </ul>
+    <ul>
+        <% for (var i = 0; i < errors.length; i++) { %>
+        <li>
+            <%=errors[i].msg%>
+        </li>
+        <% } %>
+    </ul>
 <% } %>
 
 </body>

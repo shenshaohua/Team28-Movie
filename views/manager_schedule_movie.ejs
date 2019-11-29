@@ -23,9 +23,19 @@
   <input type="date" name="releaseDate"><br>
   Play Date:<br>
   <input type="date" name="playDate"><br>
+  <br><br>
   <button type="submit" class="btn btn-primary" value="Add">Add</button>
 </form>
-
+<br><br>
+<%if (sess.isCustomer) { %>
+  <form action="/managerCustomer" method="get">
+    <button type="submit" class="btn btn-primary" value="Back">Back</button>
+  </form>
+<%} else { %>
+  <form action="/managerOnly" method="get">
+    <button type="submit" class="btn btn-primary" value="Back">Back</button>
+  </form>
+<%}%>
 <%if (errors.length > 0) { %>
   <ul>
     <% for (var i = 0; i < errors.length; i++) { %>

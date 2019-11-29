@@ -7,7 +7,7 @@ var admin_controller = require('../Controller/admin_controller');
 var login_controller = require('../Controller/login_controller');
 const customer_controller = require("../Controller/customer_controller");
 const user_controller = require("../Controller/user_controller");
-
+var register_controller =require('../Controller/register_controller');
 /* GET home page. */
 router.get('/', function(req, res, next) {
     res.render('index', { title: 'Hello', errors: [], sess: req.session});
@@ -16,9 +16,26 @@ router.get('/', function(req, res, next) {
 
 
 router.get('/login', login_controller.login_get);
+//register nevigation
+router.get('/nevigate', login_controller.nevigate_get);
 // User entered login information
 router.post('/login', login_controller.login_post);
+//register
+router.get('/userRegister', register_controller.user_register_get);
 
+router.post('/userRegister', register_controller.user_register_post);
+
+router.get('/customerRegister', register_controller.customer_register_get);
+
+router.post('/customerRegister', register_controller.customer_register_post);
+
+router.get('/managerRegister', register_controller.manager_register_get);
+
+router.post('/managerRegister', register_controller.manager_register_post);
+
+router.get('/mcRegister', register_controller.mc_register_get);
+
+router.post('/mcRegister', register_controller.mc_register_post);
 // logout page
 router.get('/logout', login_controller.logout_page);
 
@@ -55,6 +72,12 @@ router.post('/adminCreateTheater', admin_controller.create_theater_post);
 router.get('/adminCreateMovie', admin_controller.create_movie_get);
 router.post('/adminCreateMovie', admin_controller.create_movie_post);
 
+// Get and post for admin manage company (screen 14)
+router.get('/adminManageCompany/getInfo', admin_controller.manage_company_get);
+router.get('/adminManageCompany/sort', admin_controller.company_detail_sort);
+
+// Get and post for admin manage company (screen 16 is connected to screen 14 with button "Detail", will go back to screen 14 with button "Back")
+router.get('/adminCompanyDetail/getInfo', admin_controller.comDetail_get);
 
 // GET request for rendering a initial view
 router.get('/theaterDetail', manager_controller.theater_detail_get);

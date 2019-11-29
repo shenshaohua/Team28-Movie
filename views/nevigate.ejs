@@ -1,38 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin-Only Functionality</title>
+  <title><%= title %></title>
   <link rel='stylesheet' href='/stylesheets/style.css' />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-<h1>Admin-Only Functionality</h1>
-
-<form action="/adminManageUser" method="get">
-  <button type="submit" class="btn btn-primary btn-lg">Manage User</button>
+<h1><%= title %></h1>
+<form action="/userRegister" method="get">
+  <button type="submit" class="btn btn-primary btn-lg">User Only</button>
 </form>
-<form action="/adminManageCompany/getInfo" method="get">
-  <button type="submit" class="btn btn-primary btn-lg">Manage Company</button>
+</br>
+<form action="/customerRegister" method="get">
+  <button type="submit" class="btn btn-primary btn-lg">Customer Only</button>
 </form>
-<form action="/adminCreateMovie" method="get">
-  <button type="submit" class="btn btn-primary btn-lg">Create Movie</button>
+</br>
+<form action="/managerRegister" method="get">
+  <button type="submit" class="btn btn-primary btn-lg">Manager Only</button>
 </form>
+</br>
+<form action="/mcRegister" method="get">
+  <button type="submit" class="btn btn-primary btn-lg">Manager-Customer</button>
+</form>
+</br>
 <form action="/" method="get">
   <button type="submit" class="btn btn-primary btn-lg">Back</button>
 </form>
 
 
-
-
-<%if (errors.length > 0) { %>
-  <ul>
-    <% for (var i = 0; i < errors.length; i++) { %>
-    <li>
-      <%=errors[i].msg%>
-    </li>
-    <% } %>
-  </ul>
-<% } %>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+
+<h1><%= title %></h1>
+
+<form name="user_register" method="POST">
+    First Name
+    <input type="text" name="fName" value="<%=fname%>">
+    Last Name
+    <input type="text" name="lName" value="<%=lname%>"><br>
+    <br>
+    Username
+    <input type="text" name="username" value="<%=username%>"><br>
+    <br>
+    Password
+    <input type="password" name="password" value="<%=password%>">
+    Confirm Password
+    <input type="password" name="cpassword" value="<%=cpassword%>"><br>
+    <br>
+    <button type="submit" class="btn btn-primary" value="register" name="select">Register</button><br>
+    <br>
+</form>
+
+<form action="/nevigate" method="get">
+    <button type="submit" class="btn btn-primary btn-lg">Back</button>
+</form>
+
+<%if (errors.length > 0) { %>
+    <ul>
+        <% for (var i = 0; i < errors.length; i++) { %>
+        <li>
+            <%=errors[i].msg%>
+        </li>
+        <% } %>
+    </ul>
+<% } %>
+
+</body>
+</html>

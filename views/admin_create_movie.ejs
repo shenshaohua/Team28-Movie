@@ -9,16 +9,25 @@
 <h1><%= title %></h1>
 
 <form name="create_movie" method="post">
-    Name<br>
-    <input type="text" name="movieName"><br>
-    Duration<br>
-    <input type="text" name="duration"><br>
-    Release Date<br>
-    <input type="date" name="releaseDate"><br>
-  
+    Name
+    <input type="text" name="movieName">
+    <br><br>Duration
+    <input type="text" name="duration">
+    <br><br>Release Date
+    <input type="date" name="releaseDate">
+    <br><br>
   <button type="submit" class="btn btn-primary" value="Add">Add</button>
 </form>
-
+<br><br>
+<%if (sess.isCustomer) { %>
+    <form action="/adminCustomer" method="get">
+        <button type="submit" class="btn btn-primary" value="Back">Back</button>
+    </form>
+<%} else { %>
+    <form action="/adminOnly" method="get">
+        <button type="submit" class="btn btn-primary" value="Back">Back</button>
+    </form>
+<%}%>
 <%if (errors.length > 0) { %>
   <ul>
     <% for (var i = 0; i < errors.length; i++) { %>
