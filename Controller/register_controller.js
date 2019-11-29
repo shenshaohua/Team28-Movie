@@ -90,10 +90,14 @@ exports.user_register_post = [
 
 exports.customer_register_get = async function(req, res, next) {
     cards = [];
-    res.render('customer_register', {title: "Customer Register", data:cards, fname:"", errors: []});
+    res.render('customer_register', {title: "Customer Register", data:cards, fname:fName, errors: []});
     
 };
-
+var fName;
+var lName;
+var username;
+var password;
+var cpassword;
 exports.customer_register_post = [
     
     // validate fields
@@ -107,11 +111,7 @@ exports.customer_register_post = [
     sanitizeQuery('*').escape(),
 
     async (req, res, next) => {
-        var fName;
-        var lName;
-        var username;
-        var password;
-        var cpassword;
+        
         var select = req.body.select;
         console.log(select);
         if (select == 'register') {
@@ -128,7 +128,6 @@ exports.customer_register_post = [
                 res.render('customer_register', {title: "Wrong info typed!", data:cards, fname:fName, errors: errors.array()});
                 
             } else {
-                
                 var users = [];
                 var query = "select distinct username from user"
                 db.query(query, [], (error, results, fields) => {
