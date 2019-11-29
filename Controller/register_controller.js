@@ -90,7 +90,7 @@ exports.user_register_post = [
 
 exports.customer_register_get = async function(req, res, next) {
     cards = [];
-    res.render('customer_register', {title: "Customer Register", data:cards, errors: []});
+    res.render('customer_register', {title: "Customer Register", data:cards, fname:"", errors: []});
     
 };
 
@@ -112,18 +112,18 @@ exports.customer_register_post = [
         if (select == 'register') {
             // Extract the validation errors from a request.
             const errors = validationResult(req);
-            
+            var fName = req.body.fName;
+            var lName = req.body.lName;
+            var username = req.body.username;
+            var password = req.body.password;
+            var cpassword = req.body.cpassword;
             // if have logic errors
             if (!errors.isEmpty()) {
                 cards = [];
-                res.render('customer_register', {title: "Wrong info typed!", data:cards, errors: errors.array()});
+                res.render('customer_register', {title: "Wrong info typed!", data:cards, fname:"", errors: errors.array()});
                 
             } else {
-                var fName = req.body.fName;
-                var lName = req.body.lName;
-                var username = req.body.username;
-                var password = req.body.password;
-                var cpassword = req.body.cpassword;
+                
                 
 
                 var users = [];
@@ -136,7 +136,7 @@ exports.customer_register_post = [
                     users = results;
                     for (var i = 0; i < users.length; i++) {
                         if (users[i]['username'] == username) {
-                            res.render('customer_register', {title: "User name has been used!",  data:cards, errors: []});
+                            res.render('customer_register', {title: "User name has been used!", data:cards, fname: "", errors: []});
                             break;
                         }
                     }
@@ -147,13 +147,13 @@ exports.customer_register_post = [
                 //console.log(users);
                 if (password.length < 8) {
                     //console.log(password.length)
-                    res.render('customer_register', {title: "Password must be at least 8 characters!",  data:cards, errors: []});
+                    res.render('customer_register', {title: "Password must be at least 8 characters!", data:cards, fname: "", errors: []});
                 } else if (password!==cpassword) {
                     //console.log(password);
                     //console.log(cpassword);
-                    res.render('customer_register', {title: "Confirm password and password must be same!",  data:cards, errors: []});
+                    res.render('customer_register', {title: "Confirm password and password must be same!", data:cards, fname: "", errors: []});
                 } else if (cards.length == 0) {
-                    res.render('customer_register', {title: "You must enter a credit card!", data: cards, errors: []});
+                    res.render('customer_register', {title: "You must enter a credit card!", data: cards, fname: "", errors: []});
                 } else {
                     console.log(req.body);
                     var sql = "call customer_only_register(?, ?, ?, ?)";
@@ -182,11 +182,11 @@ exports.customer_register_post = [
             
             var num = req.body.cardNumber;
             if (cards.length == 5) {
-                res.render('customer_register', {title: "You can only add 5 credit cards!", data: cards, errors: []});
+                res.render('customer_register', {title: "You can only add 5 credit cards!", data: cards, fname: fName, errors: []});
             } else if(num.length != 16) {
-                res.render('customer_register', {title: "Credit card number must be 16 digits!", data: cards, errors: []});
+                res.render('customer_register', {title: "Credit card number must be 16 digits!", data: cards, fname: fName, errors: []});
             } else if(cards.includes(num)){
-                res.render('customer_register', {title: "This card has been added!", data: cards, errors: []});
+                res.render('customer_register', {title: "This card has been added!", data: cards, fname: fName, errors: []});
             } else {
                 /*var err = false;
                 var cardNums = [];
@@ -231,12 +231,12 @@ exports.customer_register_post = [
                 }
                 if (err) {
                     console.log("1");
-                    res.render('customer_register', {title: "Card number has been used!",  data: cards, errors: []});
+                    res.render('customer_register', {title: "Card number has been used!", data: cards, fname: fName, errors: []});
                 } else {
                     cards.push(num);
                     console.log(cards);
                     console.log("2");
-                    res.render('customer_register', {title: "Customer Register", data: cards, errors: []});
+                    res.render('customer_register', {title: "Customer Register", data: cards, fname: fName, errors: []});
                 };
                 
             }
@@ -244,19 +244,19 @@ exports.customer_register_post = [
             
         } else if (select == 'remove0'){
             cards.splice(0, 1);
-            res.render('customer_register', {title: "Customer Register", data: cards, errors: []});
+            res.render('customer_register', {title: "Customer Register", data: cards, fname: fName, errors: []});
         } else if (select == 'remove1'){
             cards.splice(1, 1);
-            res.render('customer_register', {title: "Customer Register", data: cards, errors: []});
+            res.render('customer_register', {title: "Customer Register", data: cards, fname: fName, errors: []});
         } else if (select == 'remove2'){
             cards.splice(2, 1);
-            res.render('customer_register', {title: "Customer Register", data: cards, errors: []});
+            res.render('customer_register', {title: "Customer Register", data: cards, fname: fName, errors: []});
         } else if (select == 'remove3'){
             cards.splice(3, 1);
-            res.render('customer_register', {title: "Customer Register", data: cards, errors: []});
+            res.render('customer_register', {title: "Customer Register", data: cards, fname: fName, errors: []});
         } else if (select == 'remove4'){
             cards.splice(4, 1);
-            res.render('customer_register', {title: "Customer Register", data: cards, errors: []});
+            res.render('customer_register', {title: "Customer Register", data: cards, fname: fName, errors: []});
         } else {
 
         };
